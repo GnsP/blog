@@ -1,0 +1,12 @@
+{
+    "filepath": "./posts/initial-post/post.json",
+    "title": "Not New To Blogging !",
+    "abstract": "Making of this blog",
+    "created": "27th March, 2017",
+    "modified": "27th March, 2017",
+    "published": true,
+    "categories": [
+        "Ironscript"
+    ],
+    "content": "<p>Well, just like the title of this post suggests, I am not exactly new to\n Blogging. This is the 3rd time I am redesigning my blog. I have been\n writing  at <a href=\"https://neovisiona.blogspot.in\">Neovisiona</a> since 2010,\n though irregulary on random stuff. </p>\n\n<p> So why did I decide to redesign my blog again ? Mostly because the old \n blog is largely unmaintained and now I am capable enough to do my blogging\n myself without using any 3rd Party CMS (Content Management System) after\n developing <a href=\"https://www.npmjs.com/package/ghournal\">Ghournal</a> and \n <a href=\"https://ironscript.github.io\">Ironscript</a> and what&#39;s more convenient than\n this blog as a testing ground for these two new technologies !!! After all\n it&#39;s a good project for a weekend and I am a guy who prefers learning from\n experimentation and experience.</p>\n\n<p> Moreover, the stuff I have written and created over the years have been\n largely random and not very well categorized / organized. I could do with\n organizing them into a presentable collection.</p>\n\n<p> So I am switching from Blogger to this new setup of github-pages, ghournal\n and Ironscript. Let&#39;s see how it goes, folks !</p>"
+}

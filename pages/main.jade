@@ -1,0 +1,94 @@
+.header
+  img(src='{{ctrl.prefix}}assets/bg.jpg')
+  .main
+    .container
+      
+      .row
+        .col.s12.centered-div
+          .blog-name
+            h1.centered-text <emph>Languoric</emph>
+            hr
+            p.centered-text Late <emph>Afternoon</emph> thoughts by <emph><a href='https://gnsp.github.io'>Ganesh Prasad</a></emph>
+        
+      .vertical-spanner-100
+        
+      .row
+        .col.s12.white.gray-text.text-darken-4
+          .container
+            .vertical-spanner-100
+            h4 The Blog that came too late
+            p.
+              The primary purpose of this Blog is to promote and showcase the simplicity of
+              design, be it User Interface and Experience (UI/UX) design or software design
+              or artistic design in general. Here I take a lazy stance in terms of design, no
+              fancy effects. The idea is to keep the Blog clean, minimal, pleasant and content
+              oriented.
+            p.
+              This Blog uses the <a href='https://github.com/GnsP/ghournal'>ghournal</a> blog
+              engine in the back-end, if we can call it a back-end. This Blog in its entirity 
+              is a Single Page Application (SPA) written in AngularJS and hosted as a github-page.
+            p.
+              This Blog is not entirely technical. There are <emph>poems, stories, drawings</emph>
+              and a lot of <emph>random thoughts</emph> too. This Blog is the way I look at the 
+              world, the way I feel about <emph>everything</emph>.
+            p.
+              The following section is a timeline view of the list of blogposts. In my opinion
+              this surely is a simple and convenient way of organizing the contents of your blog. 
+          .vertical-spanner-50
+          .row.centered-div
+            .col.s12.centered-text
+              img.end-of-post(src='{{ctrl.prefix}}assets/end.png')      
+            
+      .row
+        .col.m9.s12.white.gray-text.text-darken-4
+          .vertical-spanner-100
+          h3 Timeline
+          br 
+          hr
+          .vertical-spanner-50
+          .timeline
+            ul.treeview
+              li.year(ng-repeat='year in ctrl.timeline.years')
+                a.clickable(ng-click='ctrl.treeView[year].yearLevel = ctrl.toggle(ctrl.treeView[year].yearLevel)')
+                  i.arrow_carrot-2right.timeline-arrow-align(ng-show='!ctrl.treeView[year].yearLevel')
+                  i.arrow_carrot-2down.timeline-arrow-align(ng-show='ctrl.treeView[year].yearLevel')
+                  b {{year}}
+                ul.treeview(ng-show='ctrl.treeView[year].yearLevel')
+                  li.month(ng-repeat='month in ctrl.timeline[year].months')
+                    a.clickable(ng-click='ctrl.treeView[year][month] = ctrl.toggle(ctrl.treeView[year][month])')
+                      i.arrow_carrot-2right.timeline-arrow-align(ng-show='!ctrl.treeView[year][month]')
+                      i.arrow_carrot-2down.timeline-arrow-align(ng-show='ctrl.treeView[year][month]')
+                      b {{month}}
+                    ul.treeview(ng-show='ctrl.treeView[year][month]')
+                      li.post(ng-repeat='post in ctrl.timeline[year][month]')
+                        h5: a(href='{{ctrl.prefix}}#/post/{{post.postID}}') {{ctrl.posts[post.postID].title}}
+                        h6 {{ctrl.posts[post.postID].created}}
+                        p {{ctrl.posts[post.postID].abstract}}
+                        ul.label-list
+                          li(ng-repeat='cat in ctrl.posts[post.postID].categories')
+                            a(href='{{ctrl.prefix}}#/category/{{cat}}') {{cat}}
+                
+          .vertical-spanner-100
+        
+        .col.m3.s12.white.gray-text.text-darken-4.right-align
+          .vertical-spanner-100
+          .vertical-spanner-50
+          h4 Categories
+          ul.category-list
+            li(ng-repeat='(cat, postlist) in ctrl.categories'): a(href='{{ctrl.prefix}}#/category/{{cat}}') {{cat}}
+              
+      .row
+        .col.s12.white
+          .vertical-spanner-50
+          h3 Where is the footer !
+          p.
+            Do we really need a footer ? How many visitors really care about what you write in the 
+            footer ? Therefore, I decided to design this Blog without a traditional bulky footer
+            section. Though, we do have a single line of text with link to my homepage here.
+              
+          .vertical-spanner-100
+          hr
+          p.right-align Conceived, Designed, Developed and Written by <a href='https://gnsp.github.io'>Ganesh Prasad</a>
+              
+      
+      

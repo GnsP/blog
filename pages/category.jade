@@ -1,0 +1,45 @@
+.row
+  .col.s4.ht-5.grey.lighten-2
+  .col.s4.ht-5.grey
+  .col.s4.ht-5.grey.darken-4
+
+.row.lr-padded-20.valign-center
+  .ht-50.valign-center
+    ul.social-list.left
+      li: h2 
+        a(href='{{ctrl.prefix}}#/') <i class='arrow_carrot-left_alt2'></i>
+  .ht-50.horizontal-spanner
+  .ht-50.valign-center.flex-right
+    ul.social-list
+      li: h2.clickable: a(href='https://www.facebook.com/sharer/sharer.php?u=gnsp.github.io%2Fblog%2F%23%2Fcategory%2F{{ctrl.categoryName}}&title={{ctrl.categoryName}}', target='_blank')
+        i.social_facebook_circle
+      li: h2.clickable: a(href='https://twitter.com/intent/tweet?url=http:%2F%2Fgnsp.github.io%2Fblog%2F%23%2Fcategory%2F{{ctrl.categoryName}}', target='_blank')
+        i.social_twitter_circle
+      li: h2.clickable: a(href='https://plus.google.com/share?url=http:%2F%2Fgnsp.github.io%2Fblog%2F%23%2Fcategory%2F{{ctrl.categoryName}}', target='_blank')
+        i.social_googleplus_circle  
+
+.container
+  .row
+    .s12
+      h1 {{ctrl.categoryName}}
+      br
+      hr
+      ul(style='list-style-type:none')
+        li.post(ng-repeat='postID in ctrl.categories[ctrl.categoryName]')
+          h5: a(href='{{ctrl.prefix}}#/post/{{postID}}') {{ctrl.posts[postID].title}}
+          h6 {{ctrl.posts[postID].created}}
+          p {{ctrl.posts[postID].abstract}}
+      
+      .vertical-spanner-100
+      hr
+      p.right-align Conceived, Designed, Developed and Written by <a href='https://gnsp.github.io'>Ganesh Prasad</a>
+      
+      
+      
+      
+      
+      
+   
+      
+      
+ 

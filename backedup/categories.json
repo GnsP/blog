@@ -1,0 +1,21 @@
+{
+    "filepath": "categories.json",
+    "Poems": [
+        "trystic",
+        "pantomimist"
+    ],
+    "Articles": [
+        "rain"
+    ],
+    "Coding": [
+        "dailydigest-3-may-16",
+        "tutorialOnDP"
+    ],
+    "DailyDigest": [
+        "dailydigest-6-may-16",
+        "dailydigest-5-may-16",
+        "dailydigest-3-may-16",
+        "dailydigest-2-may-16",
+        "first-daily-digest"
+    ]
+}

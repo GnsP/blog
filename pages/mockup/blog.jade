@@ -1,0 +1,51 @@
+doctype html
+html
+  head
+    title Blog
+    link(rel='stylesheet', href='../assets/css/picnic.css')
+    link(rel='stylesheet', href='../assets/css/grid.css')
+    link(rel='stylesheet', href='../assets/css/color.css')
+    link(rel='stylesheet', href='../assets/css/font.css')
+    link(rel='stylesheet', href='../assets/css/icons/style.css')
+    link(rel='stylesheet', href='../assets/css/style.css')
+
+    script(src='../assets/bower_components/jquery/dist/jquery.js')
+    script(src='../assets/bower_components/angular-route/angular-route.js')
+    script(src='../assets/bower_components/angular/angular.js')
+    script(src='../assets/js/blogMVP.js')
+
+  body(ng-app='blog')
+    .row
+      .col.s4.ht-5.grey.lighten-2
+      .col.s4.ht-5.grey
+      .col.s4.ht-5.grey.darken-4
+      
+    .container
+      .row
+        .s12
+          .vertical-sapnner: p &nbsp;
+          h5 Monday, 18th April 2016
+          h1 Testing Post
+          .abstract
+            h2 Abstract
+            p.
+              The lump grew in size. Yuvanashva's nausea decreased and appetite increases. He wanted food all the time.
+              Amngoes. Lots of mangoes. Green ones and golden ones.
+          .content
+            p.
+              This is for testing purposes. I can write any <span style='font-style:oblique'>bullshit stuff</span> here without
+              worrying about <b>consequences</b>. Like I can write that I am a filthy dirty gnome.
+              
+            pre.
+              #include<iostream>
+              using namespace std;
+              
+              int main() {
+                cout << "Hello World !" << endl;
+                return 0;
+              } 
+            blockquote.
+              The lump grew in size. Yuvanashva's nausea decreased and appetite increases. He wanted food all the time.
+              Amngoes. Lots of mangoes. Green ones and golden ones.
+            
+            

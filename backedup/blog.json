@@ -1,0 +1,12 @@
+{
+    "filepath": "blog.json",
+    "name": "Languoric",
+    "description": "POwered by ghournal",
+    "tagline": "Late Afternoon thoughts by Ganesh Prasad",
+    "url": "https://gnsp.github.io/blog",
+    "authorLink": "author.json",
+    "postsLink": "posts.json",
+    "categoriesLink": "categories.json",
+    "timelineLink": "timeline.json",
+    "rootDirectory": "/home/gnsp/blog"
+}

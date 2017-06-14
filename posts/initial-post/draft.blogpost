@@ -1,0 +1,27 @@
+title : Not New To Blogging !
+abstract : Making of this blog
+categories : Ironscript 
+
+----------------------------------------------------------------------
+
+ Well, just like the title of this post suggests, I am not exactly new to
+ Blogging. This is the 3rd time I am redesigning my blog. I have been
+ writing  at [Neovisiona](https://neovisiona.blogspot.in) since 2010,
+ though irregulary on random stuff. 
+
+ So why did I decide to redesign my blog again ? Mostly because the old 
+ blog is largely unmaintained and now I am capable enough to do my blogging
+ myself without using any 3rd Party CMS (Content Management System) after
+ developing [Ghournal](https://www.npmjs.com/package/ghournal) and 
+ [Ironscript](https://ironscript.github.io) and what's more convenient than
+ this blog as a testing ground for these two new technologies !!! After all
+ it's a good project for a weekend and I am a guy who prefers learning from
+ experimentation and experience.
+
+ Moreover, the stuff I have written and created over the years have been
+ largely random and not very well categorized / organized. I could do with
+ organizing them into a presentable collection.
+
+ So I am switching from Blogger to this new setup of github-pages, ghournal
+ and Ironscript. Let's see how it goes, folks !
+

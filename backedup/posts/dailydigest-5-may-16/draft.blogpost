@@ -1,0 +1,35 @@
+title : Javascript - My journey to understanding
+abstract : Thoughts on why now everybody is so cool about JavaScript, when about 5-7 years ago it was considered a little more than a toy language for frontend developers. Written from my own experiences with the language.
+categories : DailyDigest
+
+----------------------------------------------------------------------
+
+It has been about 3 years since I started programming in Javascript. Back then, my early days of Javascript programming, I was under the impression (just like about 90% of my friends and peers) that Javascript is just a small language to do small things like email validation, ranges validation etc on forms on webpages. The only seemingly useful feature that I learned then was the RegEx. Then, about a month into 1st web-development project, which was an academic project (And I was doing the backend, using pure python CGI and MySQL, I was a real noob ignorant of frameworks like django, webapp2 etc, have not even read about nodeJS), I came to know about JQuery from my project partner who was doing the frontend development. Now after learning about JQuery, the meaning of Javascript changed a bit. Now I could write code to change the behaviour of various DOM elements with ease, I remember once I did a parallax scene using JQuery complete with a randomly flashing street lamp. JQuery made me feel like Javascript was more like an extension to CSS3 which can do AJAX as well !!! See, much noobness in one sentence, but that's what I felt after learning JQuery.
+
+It took me about 1 year to realise that doing AJAX calls and putting the retrieved content to their respective DOM nodes using JQuery is actually a pain in the 'back-end' and that there are frameworks like AngularJS which do that stuff easily and efficiently. By then I was no stranger to MVC pattern, I had experimented with webapp2 (Python) and Slim (PHP) frameworks by the time I started AngularJS. AngularJS made me feel like, "Yeah, this is the sensible way to do things", But again, I remained woefully ignorant about the true power and flexibility of Javascript as a serious programming language. So far it has been only a tool to work with the DOM, for me.
+
+In fact, untill the point I started doing server side development with Javascript, I had never taken the language seriously. For me it was mostly RegEx and JQuery and AngularJS, that too Angular and JQuery failing to work smoothly together most of the time. Also, javascript does not have the feel of a traditional Object Oriented Language like C++, Java, Python or PHP, in fact it does not have classes. And everything I had learned about Object Orientation, academically, was class based, nobody had taught me anything about prototype-based OOP. Even, I had no idea that such a thing as prototype-based OOP exists.
+
+Back then, I was mostly happy with writing backend code in PHP or Python or sometimes even Java Servlets and JSP (JSP sucks, really it sucks ! I had only one experience with JSP and that was enough to know that it horribly sucks). Then, just out of interest, I decided to learn NodeJS too, because a lot of people were recommending NodeJS, a lot of jobs required knowledge of NodeJS platform and it seemed pretty cool and over-hyped. But honestly, that was one decision which changed my perspective towards Javascript as a language.
+
+Given that I was to write server side code and I was more comfortable with minimal MVC frameworks, I took to ExpressJS and Mongoose. While working with ExpressJS and Mongoose, I saw that I was using familiar Object Oriented style and constructs, even though I had no idea about how to write a class in Javascript. In fact, I had no freaking idea about how those modules (libraries) were doing whatever they were doing. That got me curious and I decided to get myself some formal education in Javascript.
+
+That's when I came to know about the book named 'Eloquent Javascript' and I learned about the prototype-based OOP. That's how I understood that Javascript is not a toy language but rather a very minimal yet highly flexible programming language. That's when I realised that a function and an object notation was all I needed syntactically, to write reusable Object Oriented code in Javascript. Fortunately I was familiar with closures from my previous experiences with Python, so it all came to me rather naturally, though the prototype based inheritance did take some time to sink in. But once it was clearly understood and experimented with, I realised that the prototype-based way is actually more suited for handling dynamic (schema-less) data effectively. It provided me with the power to create and modify Objects at runtime as per my needs without having to make modifications to entire class hierarchies or resorting to complex patterns involving a lot of pointers.
+
+Now ES6 has added classes and stuff to Javascript, but I believe that now I have a good understanding of the prototype system and I feel quite natural at it. As a concluding remark, I would say that, people took a long time to realise the true power and flexibility of Javascript, but in the end it all worked out for the good. Javascript is the future.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

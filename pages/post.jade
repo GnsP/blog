@@ -1,0 +1,50 @@
+.row
+  .col.s4.ht-5.grey.lighten-2
+  .col.s4.ht-5.grey
+  .col.s4.ht-5.grey.darken-4
+
+
+.row.lr-padded-20.valign-center
+  .ht-50.valign-center
+    ul.social-list.left
+      li: h2 
+        a(href='{{ctrl.prefix}}#/') <i class='arrow_carrot-left_alt2'></i>
+  .ht-50.horizontal-spanner
+  .ht-50.valign-center.flex-right
+    ul.social-list
+      li: h2.clickable: a(href='https://www.facebook.com/sharer/sharer.php?u=gnsp.github.io%2Fblog%2F%23%2Fpost%2F{{ctrl.postID}}&title={{ctrl.post.title}}', target='_blank')
+        i.social_facebook_circle
+      li: h2.clickable: a(href='https://twitter.com/intent/tweet?url=http:%2F%2Fgnsp.github.io%2Fblog%2F%23%2Fpost%2F{{ctrl.postID}}', target='_blank')
+        i.social_twitter_circle
+      li: h2.clickable: a(href='https://plus.google.com/share?url=http:%2F%2Fgnsp.github.io%2Fblog%2F%23%2Fpost%2F{{ctrl.postID}}')
+        i.social_googleplus_circle  
+  
+.container
+  .row
+    .s12
+      h5(class='{{ctrl.post.categories[0]=="Poems"?"poem":""}}') {{ctrl.post.created}}
+      h1(itemprop='name', class='{{ctrl.post.categories[0]=="Poems"?"poem":""}}') {{ctrl.post.title}}
+      .abstract(class='{{ctrl.post.categories[0]=="Poems"?"poem":""}}')
+        h2 Abstract
+        p {{ctrl.post.abstract}}
+      .vertical-spanner-50
+      
+      .content(ng-bind-html='ctrl.post.content | unsafe', class='{{ctrl.post.categories[0]=="Poems"?"poem":""}}') 
+      
+      .vertical-spanner-50
+      .row.centered-div
+        .col.s12.centered-text
+          img.end-of-post(src='{{ctrl.prefix}}assets/end.png')      
+            
+      .vertical-spanner-100
+      .vertical-spanner-100
+      hr
+      p.right-align Conceived, Designed, Developed and Written by <a href='https://gnsp.github.io'>Ganesh Prasad</a>
+
+
+
+
+
+
+
+         

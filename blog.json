@@ -1,0 +1,12 @@
+{
+    "filepath": "blog.json",
+    "name": "Languoric",
+    "description": "Ganesh Prasad's Public Journal",
+    "tagline": "A Window To A Restive Mind",
+    "url": "https://gnsp.github.io/blog",
+    "authorLink": "author.json",
+    "postsLink": "posts.json",
+    "categoriesLink": "categories.json",
+    "timelineLink": "timeline.json",
+    "rootDirectory": "/home/gnsp/gnsp.github.io/blog"
+}

@@ -1,0 +1,445 @@
+// GENERIC ELEMENTS
+
+body
+  min-height: 100vh
+  height: 100%
+  padding: 0
+  margin: 0
+  font-family: 'lmodern'
+
+hr
+  border-top: 1px black solid
+  border-bottom: 0px black solid
+
+
+
+// TYpography
+
+
+h1
+  font-family: 'lcaps'
+  font-size: 2.5rem
+  line-height: 1.5em
+  
+  
+h2, h3, h4, h5, h6
+  fontweight: bold
+  line-height: 1.5rem
+  padding-bottom: 0
+  
+h2
+  font-size: 2rem
+
+h3
+  font-size: 1.5rem
+
+h4
+  font-size: 1.3rem
+
+h5
+  font-size: 1.2rem
+  
+h6
+  font-size: 1rem
+
+.huge
+  font-size: 4rem
+ 
+.big
+  font-size: 1.5rem
+  
+p
+  font-size: 1.1rem
+  font-weight: normal
+  font-style: normal
+  line-height: 1.5em
+  text-align: justify
+  
+pre
+  font-family: 'lmono'
+  font-size: 1rem
+  line-height: 1.25em
+  padding: 20px
+  padding-left: 50px
+  border: 1px black solid
+  border-radius: 0
+  background: white
+  
+blockquote
+  font-style: oblique
+  padding: 30px
+  padding-left: 100px
+  border-left: 10px #b7b7b7 solid
+  
+emph
+  font-style: oblique
+  
+.content>p:first-child:first-letter
+  font-weight: bold
+  font-size: 2rem
+  
+.abstract
+  padding-left: 50px
+  p
+    font-size: 1.1rem
+    line-height: 1.25em
+  h1, h2
+    font-size: 1.3rem
+    margin: 0
+  
+  
+.content img
+  padding: 30px
+  max-width: 40%
+  height: auto
+  float: right
+  padding-right: 0
+  
+  &:nth-child(3n)
+    max-width: 100%
+    float: none
+    padding-left: 0
+    
+  &:nth-child(4n)
+    float: left
+    padding-left: 0
+    
+.content hr  
+  width: 25%
+  margin-top: 80px
+  margin-bottom: 80px
+  border-top: 1px #555 solid     
+  
+// Major Elements
+  
+  
+.row
+  margin: 0 !important
+  
+table
+  width: 100%
+  
+  tr
+    height: 30px
+    border-bottom: 1px rbga(0,0,0,0.8) solid !important
+    
+    th
+      background: #F9BF3B !important
+    
+    td, th
+      padding-left: 30px
+      &:first-child
+        width: 30%
+
+
+///////////////////////////////////////////////////////////
+//  HELPER CLASSES
+///////////////////////////////////////////////////////////
+
+
+.inline
+  display: inline-block !important
+
+.fill
+  position: absolute
+  top: 0
+  left: 0
+  right: 0
+  bottom: 0
+
+
+.content
+  position: relative
+  width: 100%
+
+
+.valign-center
+  display: flex
+  align-items: center
+  justify-content: space-between
+
+.centered-text
+  position: relative
+  width: 100%
+  text-align: center
+
+.lr-padded-100
+  padding-left: 100px !important
+  padding-right: 100px !important
+
+.lr-padded-50
+  padding-left: 50px !important
+  padding-right: 50px !important
+
+.lr-padded-20
+  padding-left: 20px !important
+  padding-right: 20px !important
+
+.padded-50
+  padding: 50px !important
+
+.padded-30
+  padding: 30px !important
+
+.padded-20
+  padding: 20px !important
+
+.rounded-corner
+  border-radius: 7px
+
+.debug
+  border: 1px red solid
+
+.shadow-heavy
+  box-shadow: 0px 0px 5px rgba(0,0,0,0.5)
+
+.large-paragraph
+  line-height: 1.7
+
+
+.vertical-spanner
+  position: relative
+  display: block
+  height: 200px
+
+.vertical-spanner-100
+  position: relative
+  display: block
+  height: 100px
+
+.vertical-spanner-50
+  position: relative
+  display: block
+  height: 50px
+
+.centered-div
+  position: relative
+  width: 100%
+  display: flex
+  align-items: center
+  justify-content: center
+
+.ht-5
+  height: 5px
+
+.ht-50
+  height: 50px
+
+.ht-80
+  height: 80px
+
+.ht-100
+  height: 100px
+
+a.white-link
+  text-decoration: none
+  color: white
+  &:hover
+    color: #e74c3c
+
+.white-circle
+  position: relative
+  width: 100px
+  height: 100px
+  display: block
+  margin-top: 20px
+  margin-bottom: 20px
+  background: #fff
+  border-radius: 50%
+  border: 1px #777 solid
+
+.shadow-heavy
+  box-shadow: 0px 0px 10px rgba(50,50,50,0.4)
+
+.heading-bar
+  width: 100%
+  padding: 10px
+  padding-left: 30px
+  background: #006064
+  color: white
+  
+.fl
+  float: left
+
+.fr
+  float: right
+  
+.flex-right
+  display: flex
+  justify-content: flex-end
+  
+.arrow-down-div
+  width: 0
+  height: 0
+  border-left: 20px transparent solid
+  border-right: 20px transparent solid
+  border-top: 40px #F9BF3B solid
+  z-index: 2
+  //box-shadow: 1px 1px 5px rgba(0,0,0,0.4)
+  
+.transparent
+  background: transparent
+  
+.semi-trans
+  background: rgba(255,255,255,0.7)
+  
+.right-align
+  text-align: right
+  
+///////////////////////////////////////////////////////////////////////
+// SPECIFIC ITEMS
+///////////////////////////////////////////////////////////////////////
+
+.header
+  max-width: 100%
+  img
+    max-width: 100%
+    
+.main
+  position: absolute
+  top: 400px
+  
+.blog-name
+  padding: 10px
+  padding-left: 100px
+  padding-right: 100px
+  background: white
+  
+  
+ul.treeview, ul.treeview ul, ul.treeview li
+  margin: 0px
+  padding: 0px
+  list-style-type: none
+  line-height: 2em
+
+ul.treeview ul
+  border-left: 3px #999 solid
+  margin-left: 10px
+
+ul.treeview li
+  padding-left: 50px
+  padding-right: 5px
+   
+li.year>a, li.month>a
+  text-decoration: none
+  color: #444
+  
+li.year
+  font-size: 2rem
+li.month
+  font-size: 1.5rem
+  
+li
+  font-size: 1.2rem
+  
+li.post
+  margin-bottom: 50px !important
+  //border: 1px #999 solid
+  //border-left: 0px #999 solid
+
+
+ul.category-list
+  list-style-type: none
+  li a
+    text-align: right
+  
+
+.content p
+  font-size: 1.2rem
+
+.back-button
+  position: fixed
+  width: 100px
+  height: 100px
+  background: transparent
+  top: 5px
+  left: 0px
+
+
+ul.label-list
+  list-style-type: none
+  border-left: 0px black solid !important
+  margin-left: 0px !important
+  font-size: 1rem !important
+  line-height: 1em !important
+  
+  li
+    display: inline-block
+    padding: 5px
+    
+    padding-left: 10px !important
+    padding-right: 10px !important
+    border: 1px #555 solid
+    border-left: 1px #555 solid !important
+    line-height: 1em !important
+    padding-top: 5px !important
+    padding-bottom: 5px !important
+    a
+      text-decoration: none
+      color: #555
+      font-size: 1rem !important
+      &:hover, &:focus
+        color: #2980b9
+    
+
+a.clickable:hover
+  color: #999
+  cursor: pointer
+
+.timeline-arrow-align
+  position: relative
+  left: -0.12em
+  top: 0.08em
+
+ul.social-list
+  list-style-type: none
+  display: flex
+  align-items: center
+  justify-content: flex-end
+  padding: 0px !important
+  margin: 0px !important
+  li
+    display: inline-block
+    margin-left: 20px
+    a, .clickable
+      cursor: pointer
+      text-decoration: none
+      color: #333
+      &:hover
+        color: #999
+        
+
+ul.social-list.left
+  padding: 0px !important
+  margin: 0px !important
+  display: inline-block
+  li
+    margin-right: 20px
+    margin-left: 0px
+
+.horizontal-spanner
+  max-width: 100vw
+  width: 100vw
+
+
+.social_facebook_circle:hover
+  color: #3b5998
+
+.social_twitter_circle:hover
+  color: #f39c12
+
+.social_googleplus_circle:hover
+  color: #dd4b39
+
+.arrow_carrot-left_alt2:hover
+  color: #2ecc71
+  
+  
+img.end-of-post
+  max-width: 50px
+  
+.poem
+  text-align: center
+  padding-left: 0 !important
+  p
+    text-align: center

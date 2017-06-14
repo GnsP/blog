@@ -1,0 +1,24 @@
+doctype html
+html(ng-app='myBlog')
+  head
+    title(ng-controller='titleController as ctrl') {{ctrl.title.title()}}
+    meta(property='og:title', content='Languoric')
+    meta(itemprop='name', content='Languoric')
+    meta(name='twitter:title', content='Languoric')
+    meta(name='title', content='Languoric')
+    link(rel='stylesheet', href='assets/css/picnic.css')
+    link(rel='stylesheet', href='assets/css/grid.css')
+    link(rel='stylesheet', href='assets/css/color.css')
+    link(rel='stylesheet', href='assets/css/font.css')
+    link(rel='stylesheet', href='assets/css/icons/style.css')
+    link(rel='stylesheet', href='assets/css/style.css')
+
+    script(src='assets/bower_components/jquery/dist/jquery.js')
+    script(src='assets/bower_components/angular/angular.js')
+    script(src='assets/bower_components/angular-route/angular-route.js')
+    script(src='assets/js/blogMVP.js')
+    
+    base(href='/')
+    
+  body(ng-controller='mainController').grey-text.text-darken-4
+    <div ng-view></div>

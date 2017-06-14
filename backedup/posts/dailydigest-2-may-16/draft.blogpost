@@ -1,0 +1,86 @@
+title : Some ES6 and A Story from the Mahabharata
+abstract : A DailyDigest Post about a new JavaScript (ES6) feature I learned, some thoughts on a novel I recently started reading. The novel takes us back to the days of the Mahabharata and tells us an interesting yet rather obscure story.
+categories : DailyDigest 
+
+----------------------------------------------------------------------
+
+Today I will write about a few random things that are barely related to each other in any way. Of course we can always say that every thing, every thought existing within our universe is connected and related to everything, though we can neither prove or disprove such connections/relations easily. But anyway, the following sections, in accordance with commonsense and common-perception,  are from rather mutually exclusive domains. 
+
+### Generators in ES6
+
+Prior to ES2015, there was no concept of generator expressions in JavaScript. Now, those who are from a Python background can imagine what this post is about, because generators and comprehensions are widely used in Python, they make writing iterative generation of values and arrays (lists in context of Python) easy, short and convenient. 
+
+    def mySquareGenerator(lowerBound, upperBound):
+      """
+        This is an example of generator function in Python using yield, now this function
+        can be used like the range function in a loop. The shorthand notations described 
+        below can be used in same manner too. For example
+          
+          for i in mySquareGenerator(1,5):
+            print(i)
+          
+          This will print
+          1
+          4
+          9
+          16       
+      """
+      for i in range(lowerBound, upperBound):
+        yield i**2
+        
+    # shorthand syntax for static generators
+    # this is useful when you are to iterate over a fixed range
+    myStaticSquareGenerator = (x**2 for x in range(1,5))
+    
+    # This shorthand can be made dynamic by using this with lambda
+    # for example :
+    myDynamicSquareGenerator = lambda low,up : (x**2 for x in range(low, up))
+    
+
+As of ES5, this kind of cool stuff was not natively possible in JavaScript, though there were/are modules like es5-generators for using generators. But ES6 brings generators to the core of the language syntax (actually this is a syntactic sugar, it all gets transpiled to ES5 anyway). 
+The new additions to ES6 in this context are the generator functions which are identified by the syntax `function* ()` and the `yield` keyword. Using these two new features we can write generator functions in JavaScript just like in Python. For example :
+
+    var myCoolGenerator = function* (low, up) {
+      for (var i=low; i<up; i++) yield i*i;
+    } 
+    
+    for(var i of myCoolGenerator(1,5)) console.log(i);
+    // this will give the same output as the python example above
+    
+ Now you might have noticed that the for loop using the generator uses `of` instead of `in` to iterate over the generator. The keyword `of` is another new addition in ES6. It's the standard way to iterate over an `iterable`. An `iterable` is anything that defines the [Symbol.iterator] property. Now an `iterator` in ES6 is any object that defines a `next` method to return a tuple {done, value}. A generator function creates a generator which is iterable. That's why we use `of` instead of `in` to iterate over a generator.
+ 
+ There are shorthand versions of generators and comprehensions in ES6, probably as experimental features and not a part of the specifications, I am not sure yet, I have not gone through the ES6 specifications which is some 650+ pages long and I am new to ES6 as of now (In fact I started ES6 just today, I have been writing ES5 till now, the urge to learn ES6 came as a consequent of the urge to learn TypeScript which in turn came as a consequent of the need to learn AngularJS 2). But maybe because of their experimental status, these shorthand features have been removed from `babel 6`. In `node v5.8.0` with the `--harmony` flag, the shorthands do not seem to work either. Maybe I am just doing it wrong and that's why the shorthands are not working, there are a lot of tutorials on generator expressions in ES6 on the web and some of those tutorials have given examples of those shorthands. 
+ 
+ But the generator function syntax works fine on both `node` and `babel 6`. I will go through the specs as soon as I can and get my doubts on this matter clarified. When I do that I'll remember to mention that here in a DailyDigest post.
+ 
+ 
+---
+
+### A story about a certain Pregnant King
+
+![The Pregnant King cover](./blog/posts/dailydigest-2-may-16/assets/cover.jpg)
+
+Currently I am reading a novel named *"The Pregnant King"* by Devdutt Pattnaik. This is a re-read of the novel, I had gone through it about 8 months ago. Back then I was rather busy about some project and had gone through the novel in a hurry. Now I am taking this re-read to go through the story in details.
+
+The novel tells us the story of a certain king from the Mahabharata era named 'Yuvanashva', who got pregnant after accidentally drinking a magic potion concocted for his wives. But was it an accident or was it some *Karmic* phenomenon occuring all along ? Whether it was an accident or not, how does the society accept this and what are the consequences of this unusual pregnancy ? How does the social and political rules affect the lives of the king and everybody else involved in this story ? How and when do *duty* and *ambition* contradict each other and to what extent ? The novel does answer these questions in an elaborate manner.
+
+The novel subtly focuses on deep philosophical questions regarding the paradoxical nature of gender, and as such life. And towards the end it tries to answer those questions from an Indian *vedic* point of view. The course of the story is fluid and pleasant with nice imagery and real cultural references. During the course of the story many other philosophical issues like *various interpretations of Dharma*, *symbolism of idol worship*, *paradoxes and ambiguities of social rules*, *rigidity of the social structure vs personal freedom* etc are discussed nicely. The novel is definitely a good read. The last few chapters are really enlightening, I am looking forward to reach the last few chapters again soon.
+
+The author mentions in the preface that the story has been recounted twice in the Mahabharata and several times in other *Purana*s. The novel shifts the timeline of the story a bit from that of the original Mahabharata version to achieve some dramatism, but the essence of the story remains the same so do the philosophical issues and their possible resolutions. 
+
+In the context of current discussions on *religious intolerance in India*, I think this book is an enlightening read. It explores the Indian *Dharmic* philosophies from a rather impartial point of view, it questions certain social customs and tries to find resolutions according to the Dharmic philosophies. In the end, it affirms that the problems will be solved by the creators of the problems, as stated multiple times in the story *"From Prajapati has come the problem. From Prajapati will come the solution"*.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,14 @@
+{
+    "filepath": "posts.json",
+    "initial-post": {
+        "filepath": "./posts/initial-post/post.json",
+        "title": "Not New To Blogging !",
+        "abstract": "Making of this blog",
+        "created": "27th March, 2017",
+        "modified": "27th March, 2017",
+        "published": true,
+        "categories": [
+            "Ironscript"
+        ]
+    }
+}

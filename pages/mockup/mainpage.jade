@@ -1,0 +1,148 @@
+doctype html
+html
+  head
+    title Blog
+    link(rel='stylesheet', href='../assets/css/picnic.css')
+    link(rel='stylesheet', href='../assets/css/grid.css')
+    link(rel='stylesheet', href='../assets/css/color.css')
+    link(rel='stylesheet', href='../assets/css/font.css')
+    link(rel='stylesheet', href='../assets/css/icons/style.css')
+    link(rel='stylesheet', href='../assets/css/style.css')
+
+    script(src='../assets/bower_components/jquery/dist/jquery.js')
+    script(src='../assets/bower_components/angular-route/angular-route.js')
+    script(src='../assets/bower_components/angular/angular.js')
+    script(src='../assets/js/blogMVP.js')
+
+  body
+    .header
+      img(src='../assets/bg.jpg')
+    .main
+      .container
+      
+        .row
+          .col.s12.centered-div
+            .blog-name
+              h1.centered-text <emph>Languoric</emph>
+              hr
+              p.centered-text Late <emph>Afternoon</emph> thoughts by <emph>Ganesh Prasad</emph>
+        
+        .vertical-spanner-100
+        
+        .row
+          .col.s12.white.gray-text.text-darken-4
+            .container
+              .vertical-spanner-100
+              h4 The Blog that came too late
+              p.
+                The primary purpose of this Blog is to promote and showcase the simplicity of
+                design, be it User Interface and Experience (UI/UX) design or software design
+                or artistic design in general. Here I take a lazy stance in terms of design, no
+                fancy effects. The idea is to keep the Blog clean, minimal, pleasant and content
+                oriented.
+              p.
+                This Blog uses the <a href='https://github.com/GnsP/ghournal'>ghournal</a> blog
+                engine in the back-end, if we can call it a back-end. This Blog in its entirity 
+                is a Single Page Application (SPA) written in AngularJS and hosted as a github-page.
+              p.
+                This Blog is not entirely technical. There are <emph>poems, stories, drawings</emph>
+                and a lot of <emph>random thoughts</emph> too. This Blog is the way I look at the 
+                world, the way I feel about <emph>everything</emph>.
+              p.
+                The following section is a timeline view of the list of blogposts. In my opinion
+                this surely is a simple and convenient way of organizing the contents of your blog. 
+            
+        .row
+          .col.m9.s12.white.gray-text.text-darken-4
+            .vertical-spanner-100
+            h3 Timeline
+            br 
+            hr
+            .vertical-spanner-50
+            .timeline
+              ul.treeview
+                li.year <a href='#!'>2016</a>
+                  ul.treeview
+                    li.month <a href='#!'>January</a>
+                      ul.treeview
+                        li.post
+                          h5 A gloomy Sunday
+                          h6 1st January, 2016
+                          p This is also known as the hungarian suicide song. It's sad tune has compelled many to commit suicide
+                        li.post
+                          h5 A gloomy Sunday
+                          h6 1st January, 2016
+                          p This is also known as the hungarian suicide song. It's sad tune has compelled many to commit suicide
+                        li.post
+                          h5 A gloomy Sunday
+                          h6 1st January, 2016
+                          p This is also known as the hungarian suicide song. It's sad tune has compelled many to commit suicide
+                        li 2, Monday
+                        
+                    li.month <a href='#!'>February</a>
+                      ul.treeview
+                        li 1, Sunday
+                        li 2, Monday
+                        
+                li.year <a href='#!'>2015</a>
+                  ul.treeview
+                    li.month <a href='#!'>January</a>
+                      ul.treeview
+                        li 1, Sunday
+                        li 2, Monday
+                        
+                    li.month <a href='#!'>February</a>
+                      ul.treeview
+                        li 1, Sunday
+                        li 2, Monday
+                  
+            .vertical-spanner-100
+          
+          .col.m3.s12.white.gray-text.text-darken-4.right-align
+            .vertical-spanner-100
+            .vertical-spanner-50
+            h4 Categories
+            ul.category-list
+              li: a(href='#!') Poem
+              li: a(href='#!') Atricle
+              li: a(href='#!') Drawing
+              li: a(href='#!') Programming
+              li: a(href='#!') Story
+            
+              
+        .row
+          .col.s12.white
+            .vertical-spanner-50
+            h3 Where is the footer !
+            p.
+              Do we really need a footer ? How many visitors really care about what you write in the 
+              footer ? Therefore, I decided to design this Blog without a traditional bulky footer
+              section. Though, we do have a single line of text with link to my homepage here.
+              
+            .vertical-spanner-100
+            hr
+            p.right-align Conceived, Designed, Developed and Written by <a href='https://gnsp.github.io'>Ganesh Prasad</a>
+            
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+    script(type='text/javascript').
+      $('document').ready(function(){
+        $('li.month>ul.treeview').hide();
+        $('li.year>ul.treeview').hide();
+        $('li.year:first-child>ul.treeview').show();
+        $('li.year:first-child>ul.treeview>li.month:first-child>ul.treeview').show();
+        $('ul.treeview li>a').on('click', function(){
+          $(this).parent('li').children('ul').toggle();
+        });
+      });

@@ -1,0 +1,101 @@
+title : A Little Bit-Hack
+abstract : An useful technique to reverse the bits on an unsigned integer using bitwise operations only. This technique works in O(log n), where n is the number of bits in the unsigned interger datatype. 
+categories : DailyDigest, Coding
+
+----------------------------------------------------------------------
+
+Today I'll explain, with examples, an efficient technique to reverse the bits of an unsigned integer. Though this technique can be implemented in any programming language with little or no variations, in this post we will consider only the languages with fixed width unsigned integer types, like C, C++ and Java. The examples will be given in C. So, let's get to the hack.
+
+### Problem Statement
+
+Given an unsigned integer of `n` bits (`n` can be 8 or 16 or 32 or 64 or any power of 2) reverse its bit pattern in `O(log n)` worst case time complexity. For instance if `n = 8` and the unsigned integer in binary is `1011 0010` then after bit reversal, the binary representation of the integer should be `0100 1101`.
+
+### Analysis
+
+An intuitive and simple approach would be to iterate through the individual bits of the integer, push them to a stack and then pop the stack empty to generate the number with the bit pattern reversed. But that's an `O(n)` approach. We need to reduce the worst case time complexity to `O(log n)`. 
+
+Most of the time when we need to reduce an `O(n)` solution to `O(log n)`, we look for divide-and-conquer strategies. Here also, we will try and employ this divide and conquer strategy to reverse the bit pattern in `O(log n)`. Let's take the number in the example cited in the problem, `1011 0010` and analyse its reversal.
+
+I will use the following conventions throughout this post.
+
+    The lowest significant bit (LSB) of the pattern is indexed 0.
+    Example
+    
+      +---------------+---+---+---+---+---+---+---+---+
+      |   Bit Value   | 1 | 0 | 1 | 1 | 0 | 0 | 1 | 0 |
+      +---------------+---+---+---+---+---+---+---+---+
+      |   Index       | 7 | 6 | 5 | 4 | 3 | 2 | 1 | 0 |
+      +---------------+---+---+---+---+---+---+---+---+
+
+    reverse(X) :    bit-pattern X reversed, e.g. if X=1011, reverse(X)=1101
+    X[i:j] :        bit-i(inclusive) to bit-j(inclusive) of a bit-pattern X. e.g. if X=1101, X[2:0]=101
+    X+Y :           concatenate bit-patterns X and Y
+    
+ 
+Now, let `X = 1011 0010`.  
+Clearly `reverse(X) = reverse(X[3:0]) + reverse(X[7:4])`
+and `reverse(X[3:0]) = reverse(X[1:0]) + reverse(X[3:2])`
+and `reverse(X[7:4]) = reverse(X[5:4]) + reverse(X[7:6])`
+
+Literally we what we are doing is that, we are dividing the 8 bits to groups of 4 consecutive bits, then we are reversing the 4 bits by dividing them to 2 bits each recursively, then we are concatenating the 4-bits groups in reverse order.
+ 
+Generalising for `n` bits, the strategy is the divide them into 2 groups of `n/2` consecutive bits each, reverse them and concatenate them in reverse order. The condition for termination of this recursive strategy is that when `n==1`, the reversed pattern is same as the original pattern.
+
+### Implementation using bitwise operations only
+
+For our above strategy to work, we need two mechanisms, 1. Select n consecutive bits of a pattern, 2. Swap 2 groups of n bits each. Interestingly we can do both of these things very efficiently using bitwise ops.
+
+Selecting a number of bits from a bit pattern is as simple as creating a bit-mask for those bits and applying the mask to the original pattern using `AND`, For example if I wanted to select bits 7 to 4 in the pattern `1011 0010`, I can use the mask `1111 0000` (Notice that the mask has 1s for bits I want to select and 0s for bits I want to ignore). The selection is `0b10110010 & 0b11110000 = 0b10110000` (`0b` is prefix for binary representation in C).
+
+Swapping can be done by selecting alternate groups and shifting them in opposite directions before joining them using `OR`. The process would be clear with a bit of code. Below is the function that reverses the bits of an 8-bit unsigned integer in C.
+
+    unsigned char bitReverse(unsigned char num) {
+      num = (num & 0xf0) >> 4 | (num & 0x0f) << 4;  // Select 4 bit groups and swap them
+      num = (num & 0xcc) >> 2 | (num & 0x33) << 2;  // Select 2-bit groups and swap them
+      num = (num & 0xaa) >> 1 | (num & 0x55) << 1;  // Select alternate bits and swap
+      
+      return num; // now the bit pattern in num has been reversed
+    }
+
+### A detailed explanation
+
+Now I will explain what this piece of code does, line by line. Let's take `num = 1101 0110`.  
+In the first line, `num = (num & 0xf0) >> 4 | (num & 0x0f) << 4;`,  we do 5 things. We can rewrite the first line as the following for the sake of clarity :
+    
+    // Now num is 1101 0110
+    unsigned int leftFourBits = num & 0xf0; 
+    // leftFourBits = 1101 0110 & 1111 0000 = 1101 0000
+    
+    unsigned int rightFourBits = num & 0x0f;
+    // rightFourBits = 1101 0110 & 0000 1111 = 0000 0110
+    
+    unsigned int leftGroupShifted4BitsRight = leftFourBits >> 4;
+    // leftGroupShifted4BitsRight = 1101 0000 >> 4 = 0000 1101
+    
+    unsigned int rightGroupShifted4BitsLeft = rightFourBits << 4;
+    // rightGroupShifted4BitsLeft = 0000 0110 << 4 = 0110 0000
+    
+    // Now we have the left group on the right and the right group on the left, on two different variables
+    // We can OR those two variables to effectively swap the 4 bit groups
+    
+    num = leftGroupShifted4BitsRight | rightGroupShifted4BitsLeft
+    // num = 0110 0000 | 0000 1101 = 0110 1101
+    // See, now in num, the left and right 4 bits are swapped
+    
+
+Similarly we swap 2-bit groups and then alternate individual bits. For selecting alternate 2 bits groups we use `1100 1100 (0xcc)` and `0011 0011 (0x33)` as masks, the rest of the procedure is same, we shift them 2 bits to right and left respectively and we `OR` them to get the new num. Then we do the same method taking 1 bit at a time by using masks `1010 1010 (0xaa)` and `0101 0101 (0x55)` to swap alternate bits. After this, we have the bit pattern completely reversed.
+
+For higher values of `n` (here we had taken only 8 bit patterns, `n==8`) the same technique holds, just we have to find the respective bit masks. This technique reverses the bits in `O(log n)` worst case time complexity.
+    
+
+
+
+
+
+
+
+
+
+
+
+                

@@ -1,0 +1,35 @@
+@font-face {
+  font-family: 'lmodern';
+  font-weight: normal;
+  src: url('lmroman10-regular.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'lcaps';
+  font-weight: normal;
+  src: url('lmromancaps10-regular.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'lmodern';
+  font-weight: bold;
+  src: url('lmromandemi10-regular.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'lthin';
+  src: url('lmromandunh10-regular.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'lmodern';
+  font-weight: normal;
+  font-style: oblique;
+  src: url('lmromanunsl10-regular.otf') format('opentype');
+}
+
+@font-face {
+  font-family: 'lmono';
+  font-weight: normal;
+  src: url('lmmono10-regular.otf') format('opentype');
+}}

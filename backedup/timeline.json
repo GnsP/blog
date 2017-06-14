@@ -1,0 +1,51 @@
+{
+    "2016": {
+        "April": [
+            {
+                "postID": "tutorialOnDP",
+                "date": 27
+            },
+            {
+                "postID": "rain",
+                "date": 26
+            },
+            {
+                "postID": "pantomimist",
+                "date": 26
+            }
+        ],
+        "May": [
+            {
+                "postID": "dailydigest-6-may-16",
+                "date": 6
+            },
+            {
+                "postID": "dailydigest-5-may-16",
+                "date": 5
+            },
+            {
+                "postID": "dailydigest-3-may-16",
+                "date": 3
+            },
+            {
+                "postID": "dailydigest-2-may-16",
+                "date": 2
+            },
+            {
+                "postID": "first-daily-digest",
+                "date": 1
+            },
+            {
+                "postID": "trystic",
+                "date": 1
+            }
+        ],
+        "September": [
+            {
+                "postID": "seven-ways-to-look-at-the-rain",
+                "date": 25
+            }
+        ]
+    },
+    "filepath": "timeline.json"
+}

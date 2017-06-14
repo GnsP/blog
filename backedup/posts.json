@@ -1,0 +1,112 @@
+{
+    "filepath": "posts.json",
+    "pantomimist": {
+        "filepath": "./posts/pantomimist/post.json",
+        "title": "The Pantomimist",
+        "abstract": "A rather short expressionist poem about our never ending quest for freedom",
+        "created": "26th April, 2016",
+        "modified": "26th April, 2016",
+        "published": true,
+        "categories": [
+            "Poems"
+        ]
+    },
+    "rain": {
+        "filepath": "./posts/rain/post.json",
+        "title": "Rain",
+        "abstract": "Does everybody feel about the rain the same way as others ? Maybe not, but we all wait for the rains to come every summer anyway. Our social, economic, regional and cultural backgrounds may make our feelings about the rain differ widely, but the rain does always treat us equally.",
+        "created": "26th April, 2016",
+        "modified": "26th April, 2016",
+        "published": true,
+        "categories": [
+            "Articles"
+        ]
+    },
+    "tutorialOnDP": {
+        "filepath": "./posts/tutorialOnDP/post.json",
+        "title": "A Tutorial On Dynamic Programming (Top Down Approach)",
+        "abstract": "Dynamic Programming (DP) is an algorithmic technique generally used in solving optimization problems. Dynamic Programming is an important and quite difficult technique to master, but it's highly useful as DP can reduce problems of exponential brute-force time complexity to polynomial complexity.",
+        "created": "27th April, 2016",
+        "modified": "27th April, 2016",
+        "published": true,
+        "categories": [
+            "Coding"
+        ]
+    },
+    "trystic": {
+        "filepath": "./posts/trystic/post.json",
+        "title": "Trystic",
+        "abstract": "A rather unusual poem open for interpretation",
+        "created": "1st May, 2016",
+        "modified": "1st May, 2016",
+        "published": true,
+        "categories": [
+            "Poems"
+        ]
+    },
+    "first-daily-digest": {
+        "filepath": "./posts/first-daily-digest/post.json",
+        "title": "The First DailyDigest Post",
+        "abstract": "DailyDigest is the section where I write down random things, thoughts, all mixed up together on a daily basis. Every day we all think something interesting or learn something new or find in ourselves a new way to look at the world. This section is for those things, written everyday.",
+        "created": "1st May, 2016",
+        "modified": "1st May, 2016",
+        "published": true,
+        "categories": [
+            "DailyDigest"
+        ]
+    },
+    "dailydigest-2-may-16": {
+        "filepath": "./posts/dailydigest-2-may-16/post.json",
+        "title": "Some ES6 and A Story from the Mahabharata",
+        "abstract": "A DailyDigest Post about a new JavaScript (ES6) feature I learned, some thoughts on a novel I recently started reading. The novel takes us back to the days of the Mahabharata and tells us an interesting yet rather obscure story.",
+        "created": "2nd May, 2016",
+        "modified": "2nd May, 2016",
+        "published": true,
+        "categories": [
+            "DailyDigest"
+        ]
+    },
+    "dailydigest-3-may-16": {
+        "filepath": "./posts/dailydigest-3-may-16/post.json",
+        "title": "A Little Bit-Hack",
+        "abstract": "An useful technique to reverse the bits on an unsigned integer using bitwise operations only. This technique works in O(log n), where n is the number of bits in the unsigned interger datatype.",
+        "created": "3rd May, 2016",
+        "modified": "3rd May, 2016",
+        "published": true,
+        "categories": [
+            "DailyDigest",
+            "Coding"
+        ]
+    },
+    "dailydigest-5-may-16": {
+        "filepath": "./posts/dailydigest-5-may-16/post.json",
+        "title": "Javascript - My journey to understanding",
+        "abstract": "Thoughts on why now everybody is so cool about JavaScript, when about 5-7 years ago it was considered a little more than a toy language for frontend developers. Written from my own experiences with the language.",
+        "created": "5th May, 2016",
+        "modified": "5th May, 2016",
+        "published": true,
+        "categories": [
+            "DailyDigest"
+        ]
+    },
+    "dailydigest-6-may-16": {
+        "filepath": "./posts/dailydigest-6-may-16/post.json",
+        "title": "On Trends and A New Kind of Poverty",
+        "abstract": "Nowadays, on social media, a new class of poor have emerged, the 'urban poor'. But does that mean, before their emergence the urban areas were inhabited only by the rich and well-fed people !!! So who are these 'urban poor' and what is the reason behind this new kind of poverty.",
+        "created": "6th May, 2016",
+        "modified": "6th May, 2016",
+        "published": true,
+        "categories": [
+            "DailyDigest"
+        ]
+    },
+    "seven-ways-to-look-at-the-rain": {
+        "filepath": "./posts/seven-ways-to-look-at-the-rain/post.json",
+        "title": "Seven Ways of Looking at the Rain",
+        "abstract": "...",
+        "created": "25th September, 2016",
+        "modified": "25th September, 2016",
+        "published": false,
+        "categories": []
+    }
+}
