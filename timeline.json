@@ -5,6 +5,12 @@
                 "postID": "initial-post",
                 "date": 27
             }
+        ],
+        "June": [
+            {
+                "postID": "first-days-as-employed",
+                "date": 14
+            }
         ]
     },
     "filepath": "timeline.json"

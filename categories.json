@@ -1,6 +1,8 @@
 {
     "filepath": "categories.json",
-    "Coding": [],
+    "Coding": [
+        "first-days-as-employed"
+    ],
     "Ironscript": [
         "initial-post"
     ],

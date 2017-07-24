@@ -10,5 +10,16 @@
         "categories": [
             "Ironscript"
         ]
+    },
+    "first-days-as-employed": {
+        "filepath": "./posts/first-days-as-employed/post.json",
+        "title": "Software Development At Zomato",
+        "abstract": "My first days of employment",
+        "created": "14th June, 2017",
+        "modified": "14th June, 2017",
+        "published": true,
+        "categories": [
+            "Coding"
+        ]
     }
 }
