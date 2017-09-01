@@ -31,7 +31,7 @@ maximum obtainable score of the rest of the sequence and our player gets what's 
 
 Mathematically, we can express it as:
 
-```
+
 
       f (seq) = max (
                   seq[0] + sum( seq[1:N] ) - f( seq[1:N] ) ,
@@ -39,7 +39,7 @@ Mathematically, we can express it as:
                   seq[0] + seq[1] + seq[2] + sum( seq[3:N] ) - f( seq[3:N] )
                 )
 
-```
+
 
 i.e. the player should choose to pick 1 or 2 or 3 values depending on which move maximizes his score for the rest of
 the game.
@@ -52,7 +52,7 @@ our solution depends on the 3 consecutive values of `sum` and `f` at a time. The
 
 **The following is a C++ program implementing the solution described.**
 
-```
+
 
       #include <iostream>
       #include <vector>
@@ -93,4 +93,4 @@ our solution depends on the 3 consecutive values of `sum` and `f` at a time. The
         return 0;
       }
 
-```
+
