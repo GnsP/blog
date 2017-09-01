@@ -11,6 +11,12 @@
                 "postID": "first-days-as-employed",
                 "date": 14
             }
+        ],
+        "September": [
+            {
+                "postID": "hackerrank-dp-play-game",
+                "date": 1
+            }
         ]
     },
     "filepath": "timeline.json"

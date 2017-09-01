@@ -21,5 +21,16 @@
         "categories": [
             "Coding"
         ]
+    },
+    "hackerrank-dp-play-game": {
+        "filepath": "./posts/hackerrank-dp-play-game/post.json",
+        "title": "An Easy Dynamic Programming Problem and Solution Analysis",
+        "abstract": "Analysing how I approached and solved a dynamic programming problem. [Easy]",
+        "created": "1st September, 2017",
+        "modified": "1st September, 2017",
+        "published": true,
+        "categories": [
+            "Coding"
+        ]
     }
 }
