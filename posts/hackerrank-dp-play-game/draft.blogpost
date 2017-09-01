@@ -32,11 +32,11 @@ maximum obtainable score of the rest of the sequence and our player gets what's 
 Mathematically, we can express it as:
 
 ```
-  f (seq) = max (
-              seq[0] + sum( seq[1:N] ) - f( seq[1:N] ) ,
-              seq[0] + seq[1] + sum( seq[2:N] ) - f( seq[2:N] ) ,
-              seq[0] + seq[1] + seq[2] + sum( seq[3:N] ) - f( seq[3:N] )
-            )
+    f (seq) = max (
+                seq[0] + sum( seq[1:N] ) - f( seq[1:N] ) ,
+                seq[0] + seq[1] + sum( seq[2:N] ) - f( seq[2:N] ) ,
+                seq[0] + seq[1] + seq[2] + sum( seq[3:N] ) - f( seq[3:N] )
+              )
 ```
 
 i.e. the player should choose to pick 1 or 2 or 3 values depending on which move maximizes his score for the rest of
@@ -51,42 +51,42 @@ our solution depends on the 3 consecutive values of `sum` and `f` at a time. The
 **The following is a C++ program implementing the solution described.**
 
 ```
-#include <iostream>
-#include <vector>
-using namespace std;
+    #include <iostream>
+    #include <vector>
+    using namespace std;
 
-unsigned long long max (unsigned long long a, unsigned long long b, unsigned long long c) {
+    unsigned long long max (unsigned long long a, unsigned long long b, unsigned long long c) {
 
 
-  if (a > b && a > c) return a;
-  if (b > c) return b;
-  return c;
-}
-
-int main () {
-  int T, N;
-  unsigned long long sum[4], dp[4];
-  cin >> T;
-  while (T--) {
-    cin >> N;
-    vector <int> bricks (N+3, 0);
-    for (int i=0; i<N; i++) cin >> bricks[i];
-
-    for (int i=0; i<4; i++) {
-      sum[i] = 0;
-      dp[i] = 0;
+      if (a > b && a > c) return a;
+      if (b > c) return b;
+      return c;
     }
 
-    for (int i=N-1; i>=0; i--) {
-      sum[i % 4] = sum[(i+1) % 4] + bricks[i];
-      dp[i % 4] = max (
-        bricks[i] + sum[(i+1) % 4] - dp[(i+1) % 4],
-        bricks[i] + bricks[i+1] + sum[(i+2) % 4] - dp[(i+2) % 4],
-        bricks[i] + bricks[i+1] + bricks[i+2] + sum[(i+3) % 4] - dp[(i+3) % 4]
-      );
+    int main () {
+      int T, N;
+      unsigned long long sum[4], dp[4];
+      cin >> T;
+      while (T--) {
+        cin >> N;
+        vector <int> bricks (N+3, 0);
+        for (int i=0; i<N; i++) cin >> bricks[i];
+
+        for (int i=0; i<4; i++) {
+          sum[i] = 0;
+          dp[i] = 0;
+        }
+
+        for (int i=N-1; i>=0; i--) {
+          sum[i % 4] = sum[(i+1) % 4] + bricks[i];
+          dp[i % 4] = max (
+            bricks[i] + sum[(i+1) % 4] - dp[(i+1) % 4],
+            bricks[i] + bricks[i+1] + sum[(i+2) % 4] - dp[(i+2) % 4],
+            bricks[i] + bricks[i+1] + bricks[i+2] + sum[(i+3) % 4] - dp[(i+3) % 4]
+          );
+        }
+        cout << dp[0] << endl;
+      }
+      return 0;
     }
-    cout << dp[0] << endl;
-  }
-  return 0;
-}
 ```
