@@ -80,5 +80,24 @@
             "css"
         ],
         "abstract": "<br/>If you are a frontend developer, there is a fair chance that you have used<br/>Jedwatson&#39;s classNames package in your projects. In fact, classNames is the official replace<span class=\"ellipsis\">...</span>"
+    },
+    "making-a-neon-clock-using-react-hooks-XNgI3Z": {
+        "filepath": "./posts/making-a-neon-clock-using-react-hooks-XNgI3Z/post.json",
+        "id": "making-a-neon-clock-using-react-hooks-XNgI3Z",
+        "title": "Making a Neon Clock using React Hooks",
+        "href": "https://gnsp.in/blog/posts/making-a-neon-clock-using-react-hooks-XNgI3Z/index.html",
+        "cover_image": "https://gnsp.in/blog/posts/making-a-neon-clock-using-react-hooks-XNgI3Z/assets/cover.png",
+        "created": "September 30, 2019",
+        "modified": "September 30, 2019",
+        "published": true,
+        "categories": [
+            "react",
+            "javascript",
+            "css",
+            "html",
+            "pug",
+            "less"
+        ],
+        "abstract": "<br/>A little bit of backstory<br/>TL;DR; some rather dark humour on what motivated me to make the clock<br/><br/><span class=\"ellipsis\">...</span>"
     }
 }
