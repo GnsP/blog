@@ -8,8 +8,8 @@
     "postsLink": "posts.json",
     "categoriesLink": "categories.json",
     "timelineLink": "timeline.json",
-    "rootDirectory": "/home/gnsp/Code/Experimental/organizeBlog/newblog",
-    "baseurl": "/home/gnsp/Code/Experimental/organizeBlog/newblog",
+    "rootDirectory": "/home/gnsp/Github/blog",
+    "baseurl": "https://gnsp.in/blog",
     "links": [
         {
             "href": "https://gnsp.in",

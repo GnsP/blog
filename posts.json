@@ -2,7 +2,7 @@
     "filepath": "posts.json",
     "a-tutorial-on-dynamic-programming-dp-GcvQKX": {
         "filepath": "./posts/a-tutorial-on-dynamic-programming-dp-GcvQKX/post.json",
-        "href": "/home/gnsp/Code/Experimental/organizeBlog/newblog/posts/a-tutorial-on-dynamic-programming-dp-GcvQKX/index.html",
+        "href": "https://gnsp.in/blog/posts/a-tutorial-on-dynamic-programming-dp-GcvQKX/index.html",
         "created": "26th December, 2015",
         "modified": "26th December, 2015",
         "published": true,
@@ -19,8 +19,8 @@
     },
     "rain-DDkXvw": {
         "filepath": "./posts/rain-DDkXvw/post.json",
-        "href": "/home/gnsp/Code/Experimental/organizeBlog/newblog/posts/rain-DDkXvw/index.html",
-        "cover_image": "/home/gnsp/Code/Experimental/organizeBlog/newblog/posts/rain-DDkXvw/assets/rainyday.jpg",
+        "href": "https://gnsp.in/blog/posts/rain-DDkXvw/index.html",
+        "cover_image": "https://gnsp.in/blog/posts/rain-DDkXvw/assets/rainyday.jpg",
         "created": "19th July, 2015",
         "modified": "19th July, 2015",
         "published": true,
@@ -33,7 +33,7 @@
     },
     "software-development-at-zomato-kKa08C": {
         "filepath": "./posts/software-development-at-zomato-kKa08C/post.json",
-        "href": "/home/gnsp/Code/Experimental/organizeBlog/newblog/posts/software-development-at-zomato-kKa08C/index.html",
+        "href": "https://gnsp.in/blog/posts/software-development-at-zomato-kKa08C/index.html",
         "cover_image": false,
         "created": "July 17, 2017",
         "modified": "July 17, 2017",
@@ -44,5 +44,22 @@
         "title": "Software Development At Zomato",
         "abstract": "It has been almost 2 months since I first found myself employed and working fulltime on something I liked and cared\nabout; in short I have been coding for last 2 months with a bunch of awesome people who like coding new stuff on a rather\ndaily basis.<span class=\"ellipsis\">...</span>",
         "id": "software-development-at-zomato-kKa08C"
+    },
+    "making-the-flag-of-india-using-pug-and-less-cLjONG": {
+        "filepath": "./posts/making-the-flag-of-india-using-pug-and-less-cLjONG/post.json",
+        "id": "making-the-flag-of-india-using-pug-and-less-cLjONG",
+        "title": "Making the flag of India using Pug and Less",
+        "href": "https://gnsp.in/blog/posts/making-the-flag-of-india-using-pug-and-less-cLjONG/index.html",
+        "cover_image": "https://gnsp.in/blog/posts/making-the-flag-of-india-using-pug-and-less-cLjONG/assets/assets/cover.png",
+        "created": "August 31, 2019",
+        "modified": "August 31, 2019",
+        "published": true,
+        "categories": [
+            "html",
+            "css",
+            "pug",
+            "less"
+        ],
+        "abstract": "In this article we shall make the national flag of India (the tricolour). As an aside and fun fact, a number of other countries have national flags featuring 3 colours and the Indian flag actually has 4 colours.<br/><span class=\"ellipsis\">...</span>"
     }
 }
