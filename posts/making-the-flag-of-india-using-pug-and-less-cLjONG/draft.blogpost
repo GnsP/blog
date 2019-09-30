@@ -2,12 +2,12 @@ title: Making the flag of India using Pug and Less
 published: true
 date: August 31, 2019
 categories: html, css, pug, less
-cover_image: assets/cover.png
+cover_image: cover.png
 ----------------------------------------------------------------------
 
 In this article we shall make the national flag of India (the tricolour). As an aside and fun fact, a number of other countries have national flags featuring 3 colours and the Indian flag actually has 4 colours.
 
-![Tricolour](https://thepracticaldev.s3.amazonaws.com/i/jwymep5tm3xvcevmv5vy.png)
+![Tricolour](assets/cover.png)
 
 So let's start with defining the colours as defined in the Flag Code of India which contains the specifications for the Indian national flag.
 
@@ -198,7 +198,6 @@ Here is the pen containing the code we discussed in this post.
   Flag of India</a> by Ganesh Prasad (<a href="https://codepen.io/gnsp">@gnsp</a>)
   on <a href="https://codepen.io">CodePen</a>.</span>
 </p>
-<script async src="https://static.codepen.io/assets/embed/ei.js"></script>
 
 So, that's that and we have the national flag of India made using Pug and Less. 
 
