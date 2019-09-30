@@ -1,0 +1,202 @@
+title : classnames vs  ES6 template literals
+date: November 17, 2017
+categories : web, css, javascript, react
+
+----------------------------------------------------------------------
+
+A rather funny incident happened with me today, which got me into thinking analytically about the advantages and/or
+disadvantages of using the **classnames** library with restpect to **ES6 template literals** while creating React
+Components with stateful styling. Today one of my friends (co-developer in a React project, to be precise) claimed
+that *classnames is always a better option than ES6 template literals when dealing with styling of React components*,
+and they even went on to bet ₹1000 on this claim (*The claim derives it's confidence from the notion that classnames,
+being a popular and widely used library, must be the better option.*). I had to maintain my habit of *not betting*,
+however I got the idea to actually analyse the claim.
+
+In simpler words, my friend claimed that **Approach A** is better than **Approach B** given below.
+
+#### Approach A
+```javascript
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import classnames from 'classnames';
+
+export class ExampleComponent extends Component {
+  static propTypes = {
+    variant: PropTypes.oneOf ([ 'info', 'success', 'warning', 'error' ]).isRequired,
+    className: PropTypes.string
+  };
+
+  static defaultProps = {
+    className: ''
+  };
+
+  render () {
+    return (
+      <div
+        className={ classnames (
+          'my-custom-class',
+          this.props.className,
+          {
+            'info-class': this.props.variant === 'info',
+            'success-class': this.props.variant === 'success',
+            'warning-class': this.props.variant === 'warning',
+            'error-class': this.props.variant === 'error',
+          }
+        ) }
+      />
+    );
+  }
+}
+```
+
+#### Approach B
+
+```javascript
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+
+export class ExampleComponent extends Component {
+  static propTypes = {
+    variant: PropTypes.oneOf ([ 'info', 'success', 'warning', 'error' ]).isRequired,
+    className: PropTypes.string
+  };
+
+  static defaultProps = {
+    className: ''
+  };
+
+  static const classnamesRegistry = {
+    info: 'info-class',
+    success: 'success-class',
+    warning: 'warning-class',
+    error: 'error-class'
+  };
+
+  render () {
+    return (
+      <div
+        className={`
+          my-custom-class
+          ${ this.props.className }
+          ${ ExampleComponent.classnamesRegistry [this.props.variant] }
+        `}
+      />
+    );
+  }
+}
+```
+
+
+We will start with comparing rather obvious facts about both options and then compare them based on usage.
+
+
+
+### Factual comparisons
+
+| Point of comparison          | classnames                  | ES6 template literals                                   |
+| ---------------------------- | --------------------------- | ------------------------------------------------------- |
+| **Category**                     | Library, mantained by [**@jedwatson**](https://www.npmjs.com/~jedwatson) and community. | Language syntax, described in ES6 Sepcifications. Supported by Babel, tsc, coffeescript2.       |
+| **Usability**                    | Can be used in ES5, ES6, typescript, coffeescript...   | Is a syntactic feature of ES6 and typescript, coffeescript2 has a slightly different syntax. Can be transpiled to ES5.          |
+| **Popularity**                   | 4,051,109 downloads in the last month on npm.  | Only babel-plugin-transform-es2015-template-literals has 7,043,250 downloads in the last month on npm.    |
+| **Support**                      | Published 2 years ago. 22 releases in total. Current version 2.2.5.    | babel-plugin-transform-es2015-template-literal was published 10 months ago. 34 releases in total. Current version 6.22.0.    |
+
+
+
+
+### Usage comparisons
+
+In this section I will try to map every **classnames** feature documented in the README file of the library to equivalent
+ES6 template literal syntax.
+
+
+```javascript
+classnames ('foo', 'bar');
+`foo bar`
+// outputs 'foo bar'
+
+classnames ('foo', { 'bar': condition });
+`foo ${ condition &&  'bar' }`
+// outputs 'foo bar' when condition == true
+// outputs 'foo' when condition == false
+
+classnames ({ 'foo': condA, 'bar': condB });
+`${ condA && foo } ${ condB && bar }`
+```
+
+
+
+There are two other versions of the classnames library, shipped with the library itself. **classnames/dedupe** and
+**classnames/bind**.
+
+**classnames/dedupe** correctly dedupes classes and ensures that falsy classes specified in later
+arguments are excluded from the result set. *But it's 5x slower than classnames and hence offered as an opt-in by
+classnames.*
+
+```javascript
+import classnames from 'classnames/dedupe';
+
+classnames ('foo', 'foo', 'bar');
+// outputs 'foo bar'
+```
+
+
+
+The deduping of classes can be achieved in ES6 using **tagged template literals**. Simply create a function called
+dedupe and use it as a tag.
+
+```javascript
+// dedupe.js
+
+const dedupe = (strings, ...values) =>
+  [...new Set (
+    strings.map ( (string, index) =>
+      values [index] ? `${ string }${ values[index] }` : string
+    ).join('').split(/\s/)
+  )].join(' ');
+
+export default dedupe;
+```
+
+
+Now we can import `dedupe` and use it as a tag, as shown in the following code.
+
+```javascript
+import dedupe from 'dedupe';
+
+dedupe`foo foo bar`
+// outputs 'foo bar'
+```
+
+
+**classnames/bind**
+
+I am skipping this comparison, because the classnames/bind [documentation](https://www.npmjs.com/package/classnames#dynamic-class-names-with-es2015) says the following,
+
+*Note that in ES2015 environments, it may be better to use the "dynamic class names" approach documented above.*
+
+
+
+
+### Few observations
+
+  1. Using **ES6 template literals** and tagged template literals to manipulate classnames results in **smaller bundle
+     size**.
+  2. **classnames** is **easy to use**. It also makes it difficult for the programmer to shoot themselves in the foot.
+     ES6 template literals require the programmers to move out of their comfortzones and think more functionally.
+  3. **ES6 template literals perform better** because they get compiled to string concatenations.
+
+
+### Conclusive remarks
+
+Choosing between **Approach A** and **Approach B**, more or less, depends on the whether we want to trade performance
+smaller bundle size for ease-of-use. Also, believing in something solely because a lot of people believe in it or because
+a lot of people do it, is a bad idea. **Never believe in any claims without proper analysis.** Peace.
+
+
+
+
+
+
+
+
+

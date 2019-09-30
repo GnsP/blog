@@ -1,0 +1,160 @@
+<!DOCTYPE html><html lang="en"><head><title>classnames vs  ES6 template literals | Languoric</title><meta name="viewport" content="initial-scale=1.0"><link rel="stylesheet" href="https://gnsp.in/blog/assets/style.css"><link rel="stylesheet"></head><body><header><h3><a href="https://gnsp.in/blog">Ganesh Prasad's blog</a></h3><nav><ul><li><a href="https://gnsp.in">gnsp.in</a></li></ul></nav></header><main><h1>classnames vs  ES6 template literals</h1><h5>November 17, 2017</h5><ul class="tags"><li><a href="https://gnsp.in/blog/categories/web.html">web</a></li><li><a href="https://gnsp.in/blog/categories/css.html">css</a></li><li><a href="https://gnsp.in/blog/categories/javascript.html">javascript</a></li><li><a href="https://gnsp.in/blog/categories/react.html">react</a></li></ul><article><p>A rather funny incident happened with me today, which got me into thinking analytically about the advantages and/or
+disadvantages of using the <strong>classnames</strong> library with restpect to <strong>ES6 template literals</strong> while creating React
+Components with stateful styling. Today one of my friends (co-developer in a React project, to be precise) claimed
+that <em>classnames is always a better option than ES6 template literals when dealing with styling of React components</em>,
+and they even went on to bet ₹1000 on this claim (<em>The claim derives it&#39;s confidence from the notion that classnames,
+being a popular and widely used library, must be the better option.</em>). I had to maintain my habit of <em>not betting</em>,
+however I got the idea to actually analyse the claim.</p>
+<p>In simpler words, my friend claimed that <strong>Approach A</strong> is better than <strong>Approach B</strong> given below.</p>
+<h4 id="approach-a">Approach A</h4>
+<pre><code class="language-javascript"><span class="hljs-keyword">import</span> <span class="hljs-type">React</span>, { <span class="hljs-type">Component</span> } from <span class="hljs-symbol">'reac</span>t';
+<span class="hljs-keyword">import</span> <span class="hljs-type">PropTypes</span> from <span class="hljs-symbol">'prop</span>-types';
+<span class="hljs-keyword">import</span> classnames from <span class="hljs-symbol">'classname</span>s';
+
+export <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">ExampleComponent</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Component</span> </span>{
+  static propTypes = {
+    variant: <span class="hljs-type">PropTypes</span>.oneOf ([ <span class="hljs-symbol">'inf</span>o', <span class="hljs-symbol">'succes</span>s', <span class="hljs-symbol">'warnin</span>g', <span class="hljs-symbol">'erro</span>r' ]).isRequired,
+    className: <span class="hljs-type">PropTypes</span>.string
+  };
+
+  static defaultProps = {
+    className: ''
+  };
+
+  render () {
+    <span class="hljs-keyword">return</span> (
+      &lt;div
+        className={ classnames (
+          <span class="hljs-symbol">'my</span>-custom-<span class="hljs-class"><span class="hljs-keyword">class</span>',</span>
+          <span class="hljs-keyword">this</span>.props.className,
+          {
+            <span class="hljs-symbol">'info</span>-<span class="hljs-class"><span class="hljs-keyword">class</span>'</span>: <span class="hljs-keyword">this</span>.props.variant === <span class="hljs-symbol">'inf</span>o',
+            <span class="hljs-symbol">'success</span>-<span class="hljs-class"><span class="hljs-keyword">class</span>'</span>: <span class="hljs-keyword">this</span>.props.variant === <span class="hljs-symbol">'succes</span>s',
+            <span class="hljs-symbol">'warning</span>-<span class="hljs-class"><span class="hljs-keyword">class</span>'</span>: <span class="hljs-keyword">this</span>.props.variant === <span class="hljs-symbol">'warnin</span>g',
+            <span class="hljs-symbol">'error</span>-<span class="hljs-class"><span class="hljs-keyword">class</span>'</span>: <span class="hljs-keyword">this</span>.props.variant === <span class="hljs-symbol">'erro</span>r',
+          }
+        ) }
+      /&gt;
+    );
+  }
+}</code></pre>
+<h4 id="approach-b">Approach B</h4>
+<pre><code class="language-javascript"><span class="hljs-keyword">import</span> <span class="hljs-type">React</span>, { <span class="hljs-type">Component</span> } from <span class="hljs-symbol">'reac</span>t';
+<span class="hljs-keyword">import</span> <span class="hljs-type">PropTypes</span> from <span class="hljs-symbol">'prop</span>-types';
+
+export <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">ExampleComponent</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">Component</span> </span>{
+  static propTypes = {
+    variant: <span class="hljs-type">PropTypes</span>.oneOf ([ <span class="hljs-symbol">'inf</span>o', <span class="hljs-symbol">'succes</span>s', <span class="hljs-symbol">'warnin</span>g', <span class="hljs-symbol">'erro</span>r' ]).isRequired,
+    className: <span class="hljs-type">PropTypes</span>.string
+  };
+
+  static defaultProps = {
+    className: ''
+  };
+
+  static const classnamesRegistry = {
+    info: <span class="hljs-symbol">'info</span>-<span class="hljs-class"><span class="hljs-keyword">class</span>',</span>
+    success: <span class="hljs-symbol">'success</span>-<span class="hljs-class"><span class="hljs-keyword">class</span>',</span>
+    warning: <span class="hljs-symbol">'warning</span>-<span class="hljs-class"><span class="hljs-keyword">class</span>',</span>
+    error: <span class="hljs-symbol">'error</span>-<span class="hljs-class"><span class="hljs-keyword">class</span>'</span>
+  };
+
+  render () {
+    <span class="hljs-keyword">return</span> (
+      &lt;div
+        className={`
+          my-custom-<span class="hljs-class"><span class="hljs-keyword">class</span></span>
+          ${ <span class="hljs-keyword">this</span>.props.className }
+          ${ <span class="hljs-type">ExampleComponent</span>.classnamesRegistry [<span class="hljs-keyword">this</span>.props.variant] }
+        `}
+      /&gt;
+    );
+  }
+}</code></pre>
+<p>We will start with comparing rather obvious facts about both options and then compare them based on usage.</p>
+<h3 id="factual-comparisons">Factual comparisons</h3>
+<table>
+<thead>
+<tr>
+<th>Point of comparison</th>
+<th>classnames</th>
+<th>ES6 template literals</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Category</strong></td>
+<td>Library, mantained by <a href="https://www.npmjs.com/~jedwatson"><strong>@jedwatson</strong></a> and community.</td>
+<td>Language syntax, described in ES6 Sepcifications. Supported by Babel, tsc, coffeescript2.</td>
+</tr>
+<tr>
+<td><strong>Usability</strong></td>
+<td>Can be used in ES5, ES6, typescript, coffeescript...</td>
+<td>Is a syntactic feature of ES6 and typescript, coffeescript2 has a slightly different syntax. Can be transpiled to ES5.</td>
+</tr>
+<tr>
+<td><strong>Popularity</strong></td>
+<td>4,051,109 downloads in the last month on npm.</td>
+<td>Only babel-plugin-transform-es2015-template-literals has 7,043,250 downloads in the last month on npm.</td>
+</tr>
+<tr>
+<td><strong>Support</strong></td>
+<td>Published 2 years ago. 22 releases in total. Current version 2.2.5.</td>
+<td>babel-plugin-transform-es2015-template-literal was published 10 months ago. 34 releases in total. Current version 6.22.0.</td>
+</tr>
+</tbody></table>
+<h3 id="usage-comparisons">Usage comparisons</h3>
+<p>In this section I will try to map every <strong>classnames</strong> feature documented in the README file of the library to equivalent
+ES6 template literal syntax.</p>
+<pre><code class="language-javascript">classnames (<span class="hljs-string">'foo'</span>, <span class="hljs-string">'bar'</span>);
+`foo bar`
+// outputs <span class="hljs-string">'foo bar'</span>
+
+classnames (<span class="hljs-string">'foo'</span>, { <span class="hljs-string">'bar'</span>: condition });
+`foo ${ condition &amp;&amp;  <span class="hljs-string">'bar'</span> }`
+// outputs <span class="hljs-string">'foo bar'</span> <span class="hljs-keyword">when</span> condition == <span class="hljs-literal">true</span>
+// outputs <span class="hljs-string">'foo'</span> <span class="hljs-keyword">when</span> condition == <span class="hljs-literal">false</span>
+
+classnames ({ <span class="hljs-string">'foo'</span>: condA, <span class="hljs-string">'bar'</span>: condB });
+`${ condA &amp;&amp; foo } ${ condB &amp;&amp; bar }`</code></pre>
+<p>There are two other versions of the classnames library, shipped with the library itself. <strong>classnames/dedupe</strong> and
+<strong>classnames/bind</strong>.</p>
+<p><strong>classnames/dedupe</strong> correctly dedupes classes and ensures that falsy classes specified in later
+arguments are excluded from the result set. <em>But it&#39;s 5x slower than classnames and hence offered as an opt-in by
+classnames.</em></p>
+<pre><code class="language-javascript"><span class="hljs-keyword">import</span> classnames <span class="hljs-keyword">from</span> <span class="hljs-string">'classnames/dedupe'</span>;
+
+classnames (<span class="hljs-string">'foo'</span>, <span class="hljs-string">'foo'</span>, <span class="hljs-string">'bar'</span>);
+<span class="hljs-comment">// outputs 'foo bar'</span></code></pre>
+<p>The deduping of classes can be achieved in ES6 using <strong>tagged template literals</strong>. Simply create a function called
+dedupe and use it as a tag.</p>
+<pre><code class="language-javascript"><span class="hljs-comment">// dedupe.js</span>
+
+<span class="hljs-keyword">const</span> dedupe = <span class="hljs-function">(<span class="hljs-params">strings, ...values</span>) =&gt;</span>
+  [...new Set (
+    strings.map ( <span class="hljs-function">(<span class="hljs-params"><span class="hljs-built_in">string</span>, index</span>) =&gt;</span>
+      values [index] ? <span class="hljs-string">`<span class="hljs-subst">${ string }</span><span class="hljs-subst">${ values[index] }</span>`</span> : <span class="hljs-built_in">string</span>
+    ).join(<span class="hljs-string">''</span>).split(<span class="hljs-regexp">/\s/</span>)
+  )].join(<span class="hljs-string">' '</span>);
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> dedupe;</code></pre>
+<p>Now we can import <code>dedupe</code> and use it as a tag, as shown in the following code.</p>
+<pre><code class="language-javascript"><span class="hljs-keyword">import</span> dedupe <span class="hljs-keyword">from</span> <span class="hljs-string">'dedupe'</span>;
+
+dedupe`foo foo bar`
+<span class="hljs-comment">// outputs 'foo bar'</span></code></pre>
+<p><strong>classnames/bind</strong></p>
+<p>I am skipping this comparison, because the classnames/bind <a href="https://www.npmjs.com/package/classnames#dynamic-class-names-with-es2015">documentation</a> says the following,</p>
+<p><em>Note that in ES2015 environments, it may be better to use the &quot;dynamic class names&quot; approach documented above.</em></p>
+<h3 id="few-observations">Few observations</h3>
+<ol>
+<li>Using <strong>ES6 template literals</strong> and tagged template literals to manipulate classnames results in <strong>smaller bundle
+size</strong>.</li>
+<li><strong>classnames</strong> is <strong>easy to use</strong>. It also makes it difficult for the programmer to shoot themselves in the foot.
+ES6 template literals require the programmers to move out of their comfortzones and think more functionally.</li>
+<li><strong>ES6 template literals perform better</strong> because they get compiled to string concatenations.</li>
+</ol>
+<h3 id="conclusive-remarks">Conclusive remarks</h3>
+<p>Choosing between <strong>Approach A</strong> and <strong>Approach B</strong>, more or less, depends on the whether we want to trade performance
+smaller bundle size for ease-of-use. Also, believing in something solely because a lot of people believe in it or because
+a lot of people do it, is a bad idea. <strong>Never believe in any claims without proper analysis.</strong> Peace.</p>
+</article></main><aside><h4></h4><ul><li><h5>September 30, 2019</h5><h2><a href="https://gnsp.in/blog/posts/opensourcing-classd-TbZb2U/index.html">Opensourcing classd</a></h2><ul class="tags"><li><a href="https://gnsp.in/blog/categories/react.html">react</a></li><li><a href="https://gnsp.in/blog/categories/javascript.html">javascript</a></li><li><a href="https://gnsp.in/blog/categories/web.html">web</a></li><li><a href="https://gnsp.in/blog/categories/opensource.html">opensource</a></li><li><a href="https://gnsp.in/blog/categories/technology.html">technology</a></li><li><a href="https://gnsp.in/blog/categories/css.html">css</a></li></ul><p><br/>If you are a frontend developer, there is a fair chance that you have used<br/>Jedwatson&#39;s classNames package in your projects. In fact, classNames is the official replace<span class="ellipsis">...</span></p></li><li><h5>September 7, 2019</h5><h2><a href="https://gnsp.in/blog/posts/making-a-neon-clock-using-react-hooks-XNgI3Z/index.html">Making a Neon Clock using React Hooks</a></h2><ul class="tags"><li><a href="https://gnsp.in/blog/categories/react.html">react</a></li><li><a href="https://gnsp.in/blog/categories/javascript.html">javascript</a></li><li><a href="https://gnsp.in/blog/categories/css.html">css</a></li><li><a href="https://gnsp.in/blog/categories/html.html">html</a></li><li><a href="https://gnsp.in/blog/categories/pug.html">pug</a></li><li><a href="https://gnsp.in/blog/categories/less.html">less</a></li></ul><p><br/>A little bit of backstory<br/>TL;DR; some rather dark humour on what motivated me to make the clock<br/><br/><span class="ellipsis">...</span></p></li><li><h5>August 31, 2019</h5><h2><a href="https://gnsp.in/blog/posts/making-the-flag-of-india-using-pug-and-less-cLjONG/index.html">Making the flag of India using Pug and Less</a></h2><ul class="tags"><li><a href="https://gnsp.in/blog/categories/html.html">html</a></li><li><a href="https://gnsp.in/blog/categories/css.html">css</a></li><li><a href="https://gnsp.in/blog/categories/pug.html">pug</a></li><li><a href="https://gnsp.in/blog/categories/less.html">less</a></li></ul><p>In this article we shall make the national flag of India (the tricolour). As an aside and fun fact, a number of other countries have national flags featuring 3 colours and the Indian flag actually has 4 colours.<br/><span class="ellipsis">...</span></p></li></ul></aside><div class="footer"><h6>Powered by <a href='https://npmjs.com/package/ghournal'>ghournal</a></h6></div><script async src="https://static.codepen.io/assets/embed/ei.js"></script></body></html>

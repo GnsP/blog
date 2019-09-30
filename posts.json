@@ -99,5 +99,22 @@
             "less"
         ],
         "abstract": "<br/>A little bit of backstory<br/>TL;DR; some rather dark humour on what motivated me to make the clock<br/><br/><span class=\"ellipsis\">...</span>"
+    },
+    "classnames-vs-es6-template-literals-b3B78q": {
+        "filepath": "./posts/classnames-vs-es6-template-literals-b3B78q/post.json",
+        "id": "classnames-vs-es6-template-literals-b3B78q",
+        "title": "classnames vs  ES6 template literals",
+        "href": "https://gnsp.in/blog/posts/classnames-vs-es6-template-literals-b3B78q/index.html",
+        "cover_image": false,
+        "created": "November 17, 2017",
+        "modified": "November 17, 2017",
+        "published": true,
+        "categories": [
+            "web",
+            "css",
+            "javascript",
+            "react"
+        ],
+        "abstract": "A rather funny incident happened with me today, which got me into thinking analytically about the advantages and/or<br/>disadvantages of using the classnames library with restpect to ES6 template literals while crea<span class=\"ellipsis\">...</span>"
     }
 }
