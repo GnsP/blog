@@ -1,36 +1,48 @@
 {
     "filepath": "posts.json",
-    "initial-post": {
-        "filepath": "./posts/initial-post/post.json",
-        "title": "Not New To Blogging !",
-        "abstract": "Making of this blog",
-        "created": "27th March, 2017",
-        "modified": "27th March, 2017",
+    "a-tutorial-on-dynamic-programming-dp-GcvQKX": {
+        "filepath": "./posts/a-tutorial-on-dynamic-programming-dp-GcvQKX/post.json",
+        "href": "/home/gnsp/Code/Experimental/organizeBlog/newblog/posts/a-tutorial-on-dynamic-programming-dp-GcvQKX/index.html",
+        "created": "26th December, 2015",
+        "modified": "26th December, 2015",
         "published": true,
         "categories": [
-            "Ironscript"
-        ]
+            "programming",
+            "algorithms",
+            "logic",
+            "cpp"
+        ],
+        "title": "A Tutorial on Dynamic Programming (DP)",
+        "abstract": "\nNow that a number of people have asked me for some good resources on DP and I could find only a few good \nresources to give the beginners a real boost, I decided to write this basic DP tutorial here. But before we go \ndeep into it, I want to make it<span class=\"ellipsis\">...</span>",
+        "cover_image": false,
+        "id": "a-tutorial-on-dynamic-programming-dp-GcvQKX"
     },
-    "first-days-as-employed": {
-        "filepath": "./posts/first-days-as-employed/post.json",
+    "rain-DDkXvw": {
+        "filepath": "./posts/rain-DDkXvw/post.json",
+        "href": "/home/gnsp/Code/Experimental/organizeBlog/newblog/posts/rain-DDkXvw/index.html",
+        "cover_image": "/home/gnsp/Code/Experimental/organizeBlog/newblog/posts/rain-DDkXvw/assets/rainyday.jpg",
+        "created": "19th July, 2015",
+        "modified": "19th July, 2015",
+        "published": true,
+        "categories": [
+            "essay"
+        ],
+        "title": "Rain",
+        "abstract": "Rain is a very curious thing, we want it badly during those hot humid summer afternoons when May slowly gives way to June and the arrival of monsoon remains ever uncertain. Yet when it rains so much that floods, muddy roads and overcast skies seem to<span class=\"ellipsis\">...</span>",
+        "id": "rain-DDkXvw"
+    },
+    "software-development-at-zomato-kKa08C": {
+        "filepath": "./posts/software-development-at-zomato-kKa08C/post.json",
+        "href": "/home/gnsp/Code/Experimental/organizeBlog/newblog/posts/software-development-at-zomato-kKa08C/index.html",
+        "cover_image": false,
+        "created": "July 17, 2017",
+        "modified": "July 17, 2017",
+        "published": true,
+        "categories": [
+            "programming"
+        ],
         "title": "Software Development At Zomato",
-        "abstract": "My first days of employment",
-        "created": "14th June, 2017",
-        "modified": "14th June, 2017",
-        "published": true,
-        "categories": [
-            "Coding"
-        ]
-    },
-    "hackerrank-dp-play-game": {
-        "filepath": "./posts/hackerrank-dp-play-game/post.json",
-        "title": "An Easy Dynamic Programming Problem and Solution Analysis",
-        "abstract": "Analysing how I approached and solved a dynamic programming problem. [Easy]",
-        "created": "1st September, 2017",
-        "modified": "1st September, 2017",
-        "published": true,
-        "categories": [
-            "Coding"
-        ]
+        "abstract": "It has been almost 2 months since I first found myself employed and working fulltime on something I liked and cared\nabout; in short I have been coding for last 2 months with a bunch of awesome people who like coding new stuff on a rather\ndaily basis.<span class=\"ellipsis\">...</span>",
+        "id": "software-development-at-zomato-kKa08C"
     }
 }

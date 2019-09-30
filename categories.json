@@ -1,16 +1,34 @@
 {
     "filepath": "categories.json",
-    "Coding": [
-        "hackerrank-dp-play-game",
-        "first-days-as-employed"
+    "programming": [
+        "software-development-at-zomato-kKa08C",
+        "a-tutorial-on-dynamic-programming-dp-GcvQKX"
     ],
-    "Ironscript": [
-        "initial-post"
+    "ironscript": [],
+    "javascript": [],
+    "web": [],
+    "html": [],
+    "pug": [],
+    "css": [],
+    "less": [],
+    "technology": [],
+    "blender": [],
+    "3D": [],
+    "cpp": [
+        "a-tutorial-on-dynamic-programming-dp-GcvQKX"
     ],
-    "Web": [],
-    "HTML/CSS/Design": [],
-    "Photography": [],
-    "Blender": [],
-    "Poems": [],
-    "Stories": []
+    "python": [],
+    "datastructures": [],
+    "algorithms": [
+        "a-tutorial-on-dynamic-programming-dp-GcvQKX"
+    ],
+    "poem": [],
+    "story": [],
+    "essay": [
+        "rain-DDkXvw"
+    ],
+    "logic": [
+        "a-tutorial-on-dynamic-programming-dp-GcvQKX"
+    ],
+    "mathematics": []
 }
