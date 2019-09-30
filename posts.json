@@ -79,6 +79,6 @@
             "technology",
             "css"
         ],
-        "abstract": "\nIf you are a frontend developer, there is a fair chance that you have used\nJedwatson&#39;s classNames package in your projects. In fact, classNames is the official replacement for classSet, which was originally shipped in the React.js Addons bundle.<span class=\"ellipsis\">...</span>"
+        "abstract": "<br/>If you are a frontend developer, there is a fair chance that you have used<br/>Jedwatson&#39;s classNames package in your projects. In fact, classNames is the official replace<span class=\"ellipsis\">...</span>"
     }
 }
