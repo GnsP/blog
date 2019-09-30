@@ -1,16 +1,19 @@
 {
     "filepath": "categories.json",
     "programming": [
+        "making-a-15-puzzle-game-using-react-hooks-3U24pd",
         "software-development-at-zomato-kKa08C",
         "a-tutorial-on-dynamic-programming-dp-GcvQKX"
     ],
     "ironscript": [],
     "javascript": [
+        "making-a-15-puzzle-game-using-react-hooks-3U24pd",
         "classnames-vs-es6-template-literals-b3B78q",
         "making-a-neon-clock-using-react-hooks-XNgI3Z",
         "opensourcing-classd-TbZb2U"
     ],
     "web": [
+        "making-a-15-puzzle-game-using-react-hooks-3U24pd",
         "classnames-vs-es6-template-literals-b3B78q",
         "opensourcing-classd-TbZb2U"
     ],
@@ -23,12 +26,14 @@
         "making-the-flag-of-india-using-pug-and-less-cLjONG"
     ],
     "css": [
+        "making-a-15-puzzle-game-using-react-hooks-3U24pd",
         "classnames-vs-es6-template-literals-b3B78q",
         "making-a-neon-clock-using-react-hooks-XNgI3Z",
         "opensourcing-classd-TbZb2U",
         "making-the-flag-of-india-using-pug-and-less-cLjONG"
     ],
     "less": [
+        "making-a-15-puzzle-game-using-react-hooks-3U24pd",
         "making-a-neon-clock-using-react-hooks-XNgI3Z",
         "making-the-flag-of-india-using-pug-and-less-cLjONG"
     ],
@@ -55,6 +60,7 @@
     ],
     "mathematics": [],
     "react": [
+        "making-a-15-puzzle-game-using-react-hooks-3U24pd",
         "classnames-vs-es6-template-literals-b3B78q",
         "making-a-neon-clock-using-react-hooks-XNgI3Z",
         "opensourcing-classd-TbZb2U"

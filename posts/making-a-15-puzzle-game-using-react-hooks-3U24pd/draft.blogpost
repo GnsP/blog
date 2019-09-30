@@ -1,0 +1,526 @@
+title: Making a 15-Puzzle Game Using React Hooks
+published: true
+date: September 12, 2019
+cover_image: cover.png
+categories: react, javascript, css, web, less, programming
+----------------------------------------------------------------------
+
+
+### We are making a what !
+
+In this article, we will make a simple 15-Puzzle using React Hooks, but what is a 15-Puzzle in the first place ?
+
+As [wikipedia](https://en.wikipedia.org/wiki/15_puzzle) defines it,
+
+_The 15-puzzle (also called Gem Puzzle, Boss Puzzle, Game of Fifteen, Mystic Square and many others) is a sliding puzzle that consists of a frame of numbered square tiles in random order with one tile missing._
+
+However, the numbered variant of the puzzle is more or less that mathematical version of it. The ones sold in toy stores are generally the image variant of the game. In this variant, each of the tiles is a small square segment of an image and when the tiles are arranged in the correct order, the complete image takes form. Just like the following image (here the puzzle is in the scrambled state),
+
+
+![15 Puzzle](demo.png)
+
+
+We will be building this specific variant of the puzzle in this article. When the tiles of this puzzle are arranged in the correct order, we will get an image of Rubeus Hagrid, the Gamekeeper and Keeper of Keys and Grounds of Hogwarts.
+
+
+### A few observations
+
+Before we start coding this puzzle, let's take note of a few things about this puzzle;
+
+1. Only the tiles adjacent to (i.e. sharing an edge with) the empty square in the grid can be moved.
+2. They can be moved only to the position of the empty square.
+3. If we consider the empty square to be an empty tile, then moving an adjacent tile to the empty square can be modeled as swapping the position of the tile with the empty tile.
+4. When the tiles are in the correct order, the `i-th` tile occupies the square on `Math.floor(i / 4)`th row and `i % 4`th column in the grid.
+5. At any point of time, at most one tile can be moved in any one direction.
+
+With these observations in mind, let's start building the puzzle.
+
+
+### Scaffolding and constants
+
+First let's type out a simple webpage where our react app will be rendered. For simplicity, let's write than in pug.
+
+```pug
+html
+  head
+    title 15 Puzzle (Using React Hooks)
+    meta(name='viewport', content='initial-scale=1.0')
+    link(rel='stylesheet', href='/style.css')
+    
+  body
+    #root
+    script(type='text/javascript', src='https://cdnjs.cloudflare.com/ajax/libs/react/16.8.6/umd/react.production.min.js')
+    script(type='text/javascript', src='https://cdnjs.cloudflare.com/ajax/libs/react-dom/16.8.6/umd/react-dom.production.min.js')
+    script(type='text/javascript', src='/index.js')
+```
+
+With this webpage structure in place, let's define some constants and utility in the `index.js`.
+
+```js
+const NUM_ROWS = 4;
+const NUM_COLS = 4;
+const NUM_TILES = NUM_ROWS * NUM_COLS;
+const EMPTY_INDEX = NUM_TILES - 1;
+const SHUFFLE_MOVES_RANGE = [60, 80];
+const MOVE_DIRECTIONS = ['up', 'down', 'left', 'right'];
+
+function rand (min, max) {
+  return min + Math.floor(Math.random() * (max - min + 1));
+}
+```
+
+Here the `rand` function generates a random integer between `min` and `max` (inclusive). And the constant `SHUFFLE_MOVES_RANGE` defines the minimum and maximum number of random moves we want to execute in order to scramble the puzzle board. `EMPTY_INDEX` is the index of the empty tile. When all the tiles are in the correct order, the bottom-right square, i.e. the 16th square (array index 15) will be the empty one.
+
+### Defining the `GameState`
+
+Now let's write the logic for the puzzle and encapsulate that in a class called `GameState`. This `GameState` class should be a [singleton](https://en.wikipedia.org/wiki/Singleton_pattern), because at any point of time there should be only one game running inside the app. So, let's write that bit of logic first. 
+
+To make the class singleton, we will define a static property called `instance` which will hold the reference to the current instance of the class and a static method `getInstance` which will return the current instance if that exists, otherwise it will create a new instance and return that to us.
+
+```js
+class GameState {
+  static instance = null;
+
+  static getInstance () {
+    if (!GameState.instance) GameState.instance = new GameState();
+    return GameState.instance;
+  }
+}
+```
+
+Inside the `GameState` we want to keep track of the current state of the board, the number of moves the user has played and a [stack](https://en.wikipedia.org/wiki/Stack_(abstract_data_type)) of previous board states, so that the user can undo his/her current move and get to the previous state. 
+
+Here the most important piece of information, that we are storing, is the state of the puzzle board. Let's model it first. 
+
+The puzzle board is a set of 16 tiles (including the empty tile). At any point of time, each tile is at a certain position in the grid. The position of a tile can be represented by 2 integers denoting the `row index` and the `column index`. We can model this as an Array of integer pairs like the following (the following is the representation of the board where the tiles are in the correct order):
+
+```js
+[
+  [0, 0], // 1st tile is at 1st row, 1st column
+  [0, 1], // 2nd tile is at 1st row, 2nd column
+  [0, 2],
+  [0, 3], // 4th tile is at 1st row, 4th column
+  [1, 0], // 5th tile is at 2nd row, 1st column
+  [1, 1],
+  ...
+  [3, 2],
+  [3, 3], // 16th tile is at 4th row, 4th column (this is the empty tile)
+]
+```   
+
+Let's write a static method to generate a board state where the tiles are in correct order, remember that when the tiles are in the correct order, the `i-th` tile is at `Math.floor(i / 4) th` row and `i % 4`th column.
+
+Also, when the puzzle is solved, the tiles are in the correct order. So let's define a static property called `solvedBoard` which will store the solved state of the board.
+
+```js
+class GameState {
+  // ...
+  
+  static getNewBoard () {
+    return Array(NUM_TILES).fill(0).map((x, index) => [
+      Math.floor(index / NUM_ROWS), 
+      index % NUM_COLS
+    ]);
+  }
+  
+  static solvedBoard = GameState.getNewBoard();
+}
+``` 
+
+When a game starts, 
+1. the move counter is set to 0, 
+2. the stack of previous states is empty, and 
+3. the board is at the ordered state. 
+
+Then from this state, we shuffle / scramble the board before presenting it to the user to solve. Let's write that. At this point, we will skip writing the method to shuffle / scramble the board. We will just write a stub in its place for the time being.
+
+```js
+class GameState {
+  // ...
+  
+  constructor () {
+    this.startNewGame();
+  }
+  
+  startNewGame () {
+    this.moves = 0;
+    this.board = GameState.getNewBoard();
+    this.stack = [];
+    this.shuffle(); // we are still to define this method, 
+                    // let's put a stub in its place for now
+  }
+
+  shuffle () {
+    // set a flag that we are to shuffle the board
+    this.shuffling = true;
+
+    // Do some shuffling here ...
+    
+    // unset the flag after we are done
+    this.shuffling = false;
+  }
+}
+```
+
+Now, let's define the methods to move the tiles around. Firstly, we need to determine if a certain tile can be moved or not. Let's assume the `i-th` tile is at position `(r, c)` now. Then the `i-th` tile can be moved, if ad only if the empty-tile, i.e. the `16th` tile is currently positioned adjacent to it. To be adjacent, two tiles must be in the same row or same column, and if they are in the same row, then the difference of their column indices must be equal to one, and if they are in the same column, then the difference of their row indices must be equal to one.
+
+```js
+class GameState {
+  // ...
+
+  canMoveTile (index) {
+    // if the tile index is invalid, we can't move it
+    if (index < 0 || index >= NUM_TILES) return false;
+    
+    // get the current position of the tile and the empty tile
+    const tilePos = this.board[index];
+    const emptyPos = this.board[EMPTY_INDEX];
+
+    // if they are in the same row, then difference in their 
+    // column indices must be 1 
+    if (tilePos[0] === emptyPos[0])
+      return Math.abs(tilePos[1] - emptyPos[1]) === 1;
+
+    // if they are in the same column, then difference in their
+    // row indices must be 1
+    else if (tilePos[1] === emptyPos[1])
+      return Math.abs(tilePos[0] - emptyPos[0]) === 1;
+
+    // otherwise they are not adjacent
+    else return false;
+  }
+}
+```
+
+Actually moving a tile to the empty square is much easier, we just need to swap the positions of that tile and that of the empty tile. And, we need to do a bit of book keeping, that is -- incrementing the moves counter and pushing the state of the board before the move into the stack. (If we are in the shuffling phase, we don't want to count the moves or push the state into the stack).
+
+If the board is already solved, we want to freeze the board and disallow further movement of tiles. But at this point, we will not implement the method to check if the board is already solved or not. In place of the actual method, we will write a stub.
+
+```js
+class GameState {
+  // ...
+
+  moveTile (index) {
+    // if we are not shuffling, and the board is already solved, 
+    // then we don't need to move anything
+    // Note that, the isSolved method is not defined yet
+    // let's stub that to return false always, for now
+    if (!this.shuffling && this.isSolved()) return false;
+    
+    // if the tile can not be moved in the first place ...
+    if (!this.canMoveTile(index)) return false;
+    
+    // Get the positions of the tile and the empty tile
+    const emptyPosition = [...this.board[EMPTY_INDEX]];
+    const tilePosition = [...this.board[index]];
+    
+    // copy the current board and swap the positions
+    let boardAfterMove = [...this.board];    
+    boardAfterMove[EMPTY_INDEX] = tilePosition;
+    boardAfterMove[index] = emptyPosition;
+    
+    // update the board, moves counter and the stack
+    if (!this.shuffling) this.stack.push(this.board);
+    this.board = boardAfterMove;
+    if (!this.shuffling) this.moves += 1;
+    
+    return true;
+  }
+
+  isSolved () {
+    return false; // stub
+  }
+}
+```
+
+From observation, we know that, at any point of time at most one tile can be moved in any one direction. Therefore, if we are given the direction of the movement, we can determine which tile to move. For example, if we are given that the direction of movement is upward, then only the tile immediately below the empty square can be moved. Similarly, if the direction of movement is given to be towards left, then the tile immediately right of the empty square is to be moved. Let's write a method that will deduce which tile to move, from the given direction of movement, and move it.
+
+```js
+class GameState {
+  // ...
+  
+  moveInDirection (dir) {
+    // get the position of the empty square
+    const epos = this.board[EMPTY_INDEX];
+
+    // deduce the position of the tile, from the direction
+    // if the direction is 'up', we want to move the tile 
+    // immediately below empty, if direction is 'down', then 
+    // the tile immediately above empty and so on  
+    const posToMove = dir === 'up' ? [epos[0]+1, epos[1]]
+      : dir === 'down' ? [epos[0]-1, epos[1]]
+      : dir === 'left' ? [epos[0], epos[1]+1]
+      : dir === 'right' ? [epos[0], epos[1]-1]
+      : epos;
+
+    // find the index of the tile currently in posToMove
+    let tileToMove = EMPTY_INDEX;
+    for (let i=0; i<NUM_TILES; i++) {
+      if (this.board[i][0] === posToMove[0] && this.board[i][1] === posToMove[1]) {
+        tileToMove = i;
+        break;
+      }
+    }
+    
+    // move the tile
+    this.moveTile(tileToMove);
+  }
+}
+```
+
+Now that we have the tile moving logic in place, let's write the method to undo the previous move. This is simple, we just need to pop the previous state from the stack and restore it. Also, we need to decrement the moves counter.
+
+```js
+class GameState {
+  // ...
+  
+  undo () {
+    if (this.stack.length === 0) return false;
+    this.board = this.stack.pop();
+    this.moves -= 1;
+  }
+}
+```
+
+At this point, we have most of the game logic in place, with the exception of `shuffle` and `isSloved` methods, which are currently stubs. Let's write those methods now. For simplicity we will execute a number of random moves on the board to shuffle it. And to check if the board is solved, we will simply compare the current state of the board with the static property `solvedBoard` that we had defined earlier.
+
+```js
+class GameState {
+  // ...
+  
+  shuffle () {
+    this.shuffling = true;
+    let shuffleMoves = rand(...SHUFFLE_MOVES_RANGE);
+    while (shuffleMoves --> 0) {
+      this.moveInDirection (MOVE_DIRECTIONS[rand(0,3)]);
+    }
+    this.shuffling = false;
+  }
+
+  isSolved () {
+    for (let i=0; i<NUM_TILES; i++) {
+      if (this.board[i][0] !== GameState.solvedBoard[i][0] 
+          || this.board[i][1] !== GameState.solvedBoard[i][1]) 
+        return false;
+    }
+    return true;
+  }
+}
+```
+
+Now, let's write a method to give us the current state of the game as a plain object for convenience.
+
+```js
+class GameState {
+  // ...
+
+  getState () { 
+    // inside the object literal, `this` will refer to 
+    // the object we are making, not to the current GameState instance.
+    // So, we will store the context of `this` in a constant called `self`
+    // and use it.
+    // Another way to do it is to use GameState.instance instead of self.
+    // that will work, because GameState is a singleton class.
+    
+    const self = this;    
+
+    return {
+      board: self.board,
+      moves: self.moves,
+      solved: self.isSolved(),
+    };
+  }
+}
+```
+
+With this, the implementation of our `GameState` class is complete. We will use it in our custom react hook to power the react app for the game.
+
+### The `useGameState` custom hook
+
+Now let's wrap the GameState functionalities in a custom React Hook, so that we can use it in our React application. In this hook, we want to register event handlers for keypress so that the users can play the puzzle using directional keys of their keyboards, generate click handler functions so that users can click tiles to move them, we also want to create helper functions to undo a move and start a new game.
+
+We will attach the keyup event handlers to the document object. This needs to be done only once when the app is mounted and the event handlers need to be removed when the app is unmounted.
+
+The primary purpose of this Hook is to wrap the GameState instance as a React state, that the React components can use and update. We will not, of course, expose the raw setState method to the components. Rather, we will expose functions like `newGame`, `undo` and `move` to the components so that they can trigger state updates when the user wants to start a new game or undo a move or move a specific tile. We will expose only that part of the state and update logic, which the components using the hook absolutely need. (Keyboard events will be handled by the listeners attached to the document object. The components need not have access to those event handlers.)
+
+```js
+function useGameState () {
+  // get the current GameState instance
+  const gameState = GameState.getInstance();
+
+  // create a react state from the GameState instance
+  const [state, setState] = React.useState(gameState.getState());
+  
+  // start a new game and update the react state
+  function newGame () {
+    gameState.startNewGame();
+    setState(gameState.getState());
+  }
+  
+  // undo the latest move and update the react state
+  function undo () {
+    gameState.undo();
+    setState(gameState.getState());
+  }
+  
+  // return a function that will move the i-th tile 
+  // and update the react state 
+  function move (i) {
+    return function () {
+      gameState.moveTile(i);
+      setState(gameState.getState());
+    }
+  }
+  
+  React.useEffect(() => {
+    // attach the keyboard event listeners to document
+    document.addEventListener('keyup', function listeners (event) {
+      
+      if (event.keyCode === 37) gameState.moveInDirection('left');
+      else if (event.keyCode === 38) gameState.moveInDirection('up');
+      else if (event.keyCode === 39) gameState.moveInDirection('right');
+      else if (event.keyCode === 40) gameState.moveInDirection('down');
+      
+      setState(gameState.getState());
+    });
+    
+    // remove the evant listeners when the app unmounts
+    return (() => window.removeEventListener(listeners));
+  }, [gameState]); 
+  // this effect hook will run only when the GameState instance changes.
+  // That is, only when the app is mounted and the GameState instance
+  // is created
+  
+  // expose the state and the update functions for the components 
+  return [state.board, state.moves, state.solved, newGame, undo, move];
+}
+```
+
+### The React components of the Puzzle
+
+Now that we have a conceptual model of the puzzle and functions to update that model on user interaction events, let's write some components to display the game on screen. The game display here is pretty simple, it has a header part that shows the number of moves the user has made and the undo button. Below that is the puzzle board which will have the tiles. The puzzle board will also display a `PLAY AGAIN` button when the puzzle is solved.
+
+In the puzzle board, we do not need to render the 16th tile, because that represents the empty tile. In the display, that will remain empty. On each of the displayed tiles, we will add an `onClick` event handler, so that when the user clicks on a tile, it will move if it can be moved.
+
+The puzzle board will be of the dimensions `400px * 400px` and the tiles will be positioned absolutely with respect to it. Each tile will be of the dimension `95px * 95px` with `5px` gutter space between tiles.
+
+The following function implements the `App` component. This is the basic layout of the application.    
+
+```jsx
+function App () {
+  const [board, moves, solved, newGame, undo, move] = useGameState();
+  
+  return (
+    <div className='game-container'>
+      <div className='game-header'>
+        <div className='moves'>
+          {moves}
+        </div>
+        <button className='big-button' onClick={undo}> UNDO </button>
+      </div>
+      <div className='board'>
+      {
+        board.slice(0,-1).map((pos, index) => ( 
+          <Tile index={index} pos={pos} onClick={move(index)} />
+        ))
+      }
+      { solved &&
+          <div className='overlay'>
+            <button className='big-button' onClick={newGame}>
+              PLAY AGAIN 
+            </button>
+          </div>
+      }
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.render(<App />, document.getElementById('root'));
+```
+
+Now, let's implement the `Tile` component, which will display and position each individual tile on the board. As mentioned earlier, the tiles will be positioned absolutely with respect to the board. Given the `row index` and `column index` of a tile, we can find its position on the board. We know that each square on the grid is of the dimension `100px * 100px` with `5px` gutter space between tiles. So, we can simply multiply the `row index` and `column index` of the tile with 100 and add 5, to get the top and left positions of the tile.
+
+Similarly, we can derive the backgroundPosition of the background image for each tile, by finding which part of the background image they display when placed in the correct order. For that first we need to calculate the position of the tile, when in placed correct order. We know that the `i-th` tile is positioned on `Math.floor(i / 4)`th row and `i % 4`th column in the correct order. From that we can calculate the position in form of pixels from top and pixels from left by multiplying the row and column indices by 100 and then adding 5. The background positions will be the negative of these values.
+
+```jsx
+function Tile ({index, pos, onClick}) {
+  const top = pos[0]*100 + 5;
+  const left = pos[1]*100 + 5;
+  const bgLeft = (index%4)*100 + 5;
+  const bgTop = Math.floor(index/4)*100 + 5;
+  
+  return <div 
+    className='tile'
+    onClick={onClick}
+    style={{top, left, backgroundPosition: `-${bgLeft}px -${bgTop}px`}} 
+  />;
+}
+```
+
+### Styling the Puzzle
+
+Before styling the puzzle, we need to find a good `400px * 400px` image to use as the background image of our tiles. Alternatively, we can also use numbers for the puzzle (like the wikipedia article for 15-Puzzle mentioned). In any case, let's look at some of the important bits of styling this app.
+
+#### Positioning the board and the tiles
+
+The actual width and height of the board will be `400px + 5px`, because 4 columns or rows need 5 gutters around them. However that does not affect the dimensions of the tiles, because we can safely think the 5th gutter to be outside the board. The board needs to have position declared as `relative` so that the tiles can be positioned absolutely with respect to it.
+
+In case of the tiles, the dimension will be `95px * 95px` to allow for the `5px` gutters.  Their `background-size`, however, should be `400px * 400px`, because each tile shows only a specific square from the full sized `400px * 400px` image. The background position will be set as inline style by the react component. 
+
+To make the tile movements appear smooth and natural, we can use css transitions. Here we have used a 0.1s ease-in-out transition on tiles.  
+
+```css
+.board {
+  width: 405px;
+  height: 405px;
+  position: relative;
+  background: #ddd;
+}
+
+.tile {
+  width: 95px;
+  height: 95px;
+  position: absolute;
+  background: white;
+  transition: all 0.1s ease-in-out;
+  border-radius: 2px;
+  background-image: url('@{bg-img}');
+  background-size: 400px 400px;
+}
+```
+
+#### Positioning the overlay
+
+The overlay is another direct child of the board. It needs to cover the board when the game ends. So, we will give it the same dimensions as the board and place it absolutely at `(0, 0)`. It needs to be over the tiles, so we will give it a high `z-index`. We will also give it a semi transparent dark background color. It will contain the `PLAY AGAIN` button at the center, so we will make it a flex container with both `align-items` and `justify-content` set to `center`.
+
+```css
+.overlay {
+  width: 405px;
+  height: 405px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 10;
+  background: #0004;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+```
+
+
+**Here is the pen containing everything described in this article.**
+
+_(Pardon me for embedding the image in base64 encoded form at the beginning of the less file. Adding asset files on codepen is a PRO only feature, and I, quite regrettably, is a free tier user.)_ 
+
+<p class="codepen" data-height="265" data-theme-id="0" data-default-tab="css,result" data-user="gnsp" data-slug-hash="YzKvWPj" style="height: 265px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid; margin: 1em 0; padding: 1em;" data-pen-title="15-Puzzle (Using React Hooks)">
+  <span>See the Pen <a href="https://codepen.io/gnsp/pen/YzKvWPj">
+  15-Puzzle (Using React Hooks)</a> by Ganesh Prasad (<a href="https://codepen.io/gnsp">@gnsp</a>)
+  on <a href="https://codepen.io">CodePen</a>.</span>
+</p>
+
+Hoping you enjoyed reading about this little project and learned a few things from it. 
+
+**Thanks for reading !**
+

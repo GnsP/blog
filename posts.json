@@ -116,5 +116,24 @@
             "react"
         ],
         "abstract": "A rather funny incident happened with me today, which got me into thinking analytically about the advantages and/or<br/>disadvantages of using the classnames library with restpect to ES6 template literals while crea<span class=\"ellipsis\">...</span>"
+    },
+    "making-a-15-puzzle-game-using-react-hooks-3U24pd": {
+        "filepath": "./posts/making-a-15-puzzle-game-using-react-hooks-3U24pd/post.json",
+        "id": "making-a-15-puzzle-game-using-react-hooks-3U24pd",
+        "title": "Making a 15-Puzzle Game Using React Hooks",
+        "href": "https://gnsp.in/blog/posts/making-a-15-puzzle-game-using-react-hooks-3U24pd/index.html",
+        "cover_image": "https://gnsp.in/blog/posts/making-a-15-puzzle-game-using-react-hooks-3U24pd/assets/cover.png",
+        "created": "September 12, 2019",
+        "modified": "September 12, 2019",
+        "published": true,
+        "categories": [
+            "react",
+            "javascript",
+            "css",
+            "web",
+            "less",
+            "programming"
+        ],
+        "abstract": "We are making a what !<br/>In this article, we will make a simple 15-Puzzle using React Hooks, but what is a 15-Puzzle in the first place ?<br/><br/><span class=\"ellipsis\">...</span>"
     }
 }
