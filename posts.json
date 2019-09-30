@@ -61,5 +61,23 @@
             "less"
         ],
         "abstract": "In this article we shall make the national flag of India (the tricolour). As an aside and fun fact, a number of other countries have national flags featuring 3 colours and the Indian flag actually has 4 colours.<br/><span class=\"ellipsis\">...</span>"
+    },
+    "opensourcing-classd-TbZb2U": {
+        "filepath": "./posts/opensourcing-classd-TbZb2U/post.json",
+        "id": "opensourcing-classd-TbZb2U",
+        "title": "Opensourcing classd",
+        "href": "https://gnsp.in/blog/posts/opensourcing-classd-TbZb2U/index.html",
+        "cover_image": false,
+        "created": "September 30, 2019",
+        "modified": "September 30, 2019",
+        "published": true,
+        "categories": [
+            "react",
+            "javascript",
+            "web",
+            "opensource",
+            "technology",
+            "css"
+        ]
     }
 }

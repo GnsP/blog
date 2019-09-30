@@ -1,0 +1,148 @@
+<!DOCTYPE html><html lang="en"><head><title>Opensourcing classd | Languoric</title><meta name="viewport" content="initial-scale=1.0"><link rel="stylesheet" href="https://gnsp.in/blog/assets/style.css"><link rel="stylesheet"></head><body><header><h3><a href="https://gnsp.in/blog">Ganesh Prasad's blog</a></h3><nav><ul><li><a href="https://gnsp.in">gnsp.in</a></li></ul></nav></header><main><h1>Opensourcing classd</h1><h5>September 30, 2019</h5><ul class="tags"><li><a href="https://gnsp.in/blog/categories/react.html">react</a></li><li><a href="https://gnsp.in/blog/categories/javascript.html">javascript</a></li><li><a href="https://gnsp.in/blog/categories/web.html">web</a></li><li><a href="https://gnsp.in/blog/categories/opensource.html">opensource</a></li><li><a href="https://gnsp.in/blog/categories/technology.html">technology</a></li><li><a href="https://gnsp.in/blog/categories/css.html">css</a></li></ul><article><hr>
+<p>If you are a frontend developer, there is a fair chance that you have used
+<a href="https://github.com/JedWatson/classnames">Jedwatson&#39;s classNames</a> package in your projects. In fact, classNames is the official replacement for classSet, which was originally shipped in the React.js Addons bundle. It&#39;s one of the most used packages in the world of React.</p>
+<h3 id="a-simple-usecase-for-classnames">A simple usecase for <code>classNames</code></h3>
+<p>For instance, if we needed to conditionally apply css classes to an element inside a React component based on the component state, we may do it like the following:</p>
+<pre><code class="language-js"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">EnhancedButton</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">React</span>.<span class="hljs-title">Component</span> </span>{
+    <span class="hljs-comment">// ...</span>
+
+    render () {
+        const btnClass = classNames({
+            <span class="hljs-symbol">'bt</span>n': <span class="hljs-literal">true</span>,
+            <span class="hljs-symbol">'btn</span>-large': <span class="hljs-literal">true</span>,
+            <span class="hljs-symbol">'btn</span>-primary': <span class="hljs-literal">true</span>,
+            <span class="hljs-symbol">'btn</span>-pressed': <span class="hljs-keyword">this</span>.state.isPressed,
+            <span class="hljs-symbol">'btn</span>-over': !<span class="hljs-keyword">this</span>.state.isPressed &amp;&amp; <span class="hljs-keyword">this</span>.state.isHovered
+        });
+
+        <span class="hljs-keyword">return</span> &lt;button className={btnClass}&gt;{<span class="hljs-keyword">this</span>.props.label}&lt;/button&gt;;
+    }
+}</code></pre>
+<p>The approach above is neat, but given that many of the classes are applied unconditionally, the pattern of setting them to  true in the configuration object becomes rather redundant. To counter that redundancy, we may write something like the following:</p>
+<pre><code class="language-js">const btnClass = classNames(
+    'btn', 
+    'btn-large',
+    'btn-primary',
+    {
+        'btn-pressed': this.<span class="hljs-keyword">state</span>.isPressed,
+        'btn-over': !this.<span class="hljs-keyword">state</span>.isPressed &amp;&amp; this.<span class="hljs-keyword">state</span>.isHovered  
+    }
+);</code></pre>
+<h3 id="age-of-es6-template-literals">Age of ES6 <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals">template literals</a></h3>
+<p>However, as <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals">ES6 or ES2015 template literals</a> became <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals#Browser_compatibility">supported across mainstream browsers</a>, it became simpler to write the above snippet as:</p>
+<pre><code class="language-js">const btnClass = `
+    btn 
+    btn-large 
+    btn-primary 
+    ${this.<span class="hljs-keyword">state</span>.isPressed ? 'btn-pressed' : ''}
+    ${(!this.<span class="hljs-keyword">state</span>.isPressed &amp;&amp; this.<span class="hljs-keyword">state</span>.isHovered) ? 'btn-over' : ''}
+`;</code></pre>
+<p>Though the template literal way of writing class names is somewhat simpler and faster, it&#39;s <strong>still fairly redundant</strong> and it&#39;s not free of certain pitfalls. For example, while writing <code>${(!this.state.isPressed &amp;&amp; this.state.isHovered) ? &#39;btn-over&#39; : &#39;&#39;}</code>, making sure that an empty string <code>&#39;&#39;</code> gets added if the condition fails, is quite redundant and long. And the template literal <strong>does not remove extra/unnecessary whitespace and newlines</strong> from the output on its own.</p>
+<p>For example, why not write something like <code>${!this.state.isPressed &amp;&amp; this.state.isHovered &amp;&amp; &#39;btn-over&#39;}</code> ? But there is a pitfall; if the condition resolves to <code>true</code>, the <code>btn-over</code> gets added, but if the condition resolves to <code>false</code>, the string <code>&#39;false&#39;</code> gets added to the output. What if we write expressions that resolve to <code>undefined</code> or <code>null</code> or <code>NaN</code> or anything similar ? Javascript would simply treat them as strings and move on. It goes without saying that there are plenty of such &#39;shoot in the foot&#39; scenarios with this approach.</p>
+<p>Moreover, what if we already have a valid configuration object and we want to reduce it to a classnames string ? There is no obvious way to do that directly using only the template literals, we may possibly do it like <code>Object.keys(config).reduce(...)</code>, or we may use the classNames package to do it for us. Of course, using the classNames package is more performant, because the package is well optimized for this usecase.</p>
+<p>But what if there was a way to write the above example like the following without having any behavioral pitfalls and without losing any performance,</p>
+<pre><code class="language-js">const btnClass = secretSauce`
+    btn
+    btn-large
+    btn-primary
+    ${this.<span class="hljs-keyword">state</span>.isPressed &amp;&amp; 'btn-pressed'}
+    ${!this.<span class="hljs-keyword">state</span>.isPressed &amp;&amp; this.<span class="hljs-keyword">state</span>.isHovered &amp;&amp; 'btn-over'}
+`;</code></pre>
+<h2 id="enter-classd">Enter <a href="https://www.npmjs.com/package/classd"><code>classd</code></a></h2>
+<p><code>classd</code> is the secretSauce you needed in the example above. It&#39;s tagged template based fast and modern classNames alternative that preserves all the awesome bits of classNames and augments it with more.</p>
+<p>The <code>classd</code> tag processes the interpolation values in the template literal according to the following specification.</p>
+<ol>
+<li>Strings and numbers are valid values and are added to the output.</li>
+<li>It drops <code>undefined</code>, <code>null</code>, <code>NaN</code> and <code>boolean</code> values.</li>
+<li>If the value is an Array or an Iterable, it flattens the value and recursively processes the elements.</li>
+<li>If the value is an Object or a Map, it drops keys associated with falsy values and adds the remaining keys to the output.</li>
+<li>If the value is a function, it calls the function and adds its return value if that&#39;s valid</li>
+<li>It removes all unnecessary whitespace.</li>
+</ol>
+<p>Here are a few examples:</p>
+<pre><code class="language-js">classd<span class="hljs-string">`foo bar`</span>; <span class="hljs-comment">// =&gt; 'foo bar'</span>
+classd<span class="hljs-string">`foo <span class="hljs-subst">${<span class="hljs-literal">null</span> &amp;&amp; <span class="hljs-string">'bar'</span>}</span>`</span>; <span class="hljs-comment">// =&gt; 'foo'</span>
+classd<span class="hljs-string">`foo-<span class="hljs-subst">${<span class="hljs-literal">true</span> &amp;&amp; <span class="hljs-string">'bar'</span>}</span>`</span>; <span class="hljs-comment">// =&gt; 'foo-bar'</span>
+classd<span class="hljs-string">`<span class="hljs-subst">${<span class="hljs-literal">true</span>}</span> <span class="hljs-subst">${<span class="hljs-literal">false</span>}</span>`</span>; <span class="hljs-comment">// =&gt; ''</span>
+classd<span class="hljs-string">`<span class="hljs-subst">${{ foo: <span class="hljs-literal">true</span>, bar: <span class="hljs-literal">false</span>}</span>}`</span>; <span class="hljs-comment">// =&gt; 'foo'</span>
+classd<span class="hljs-string">`<span class="hljs-subst">${{foo: <span class="hljs-literal">true</span>}</span>} <span class="hljs-subst">${{bar: <span class="hljs-literal">true</span>}</span>} <span class="hljs-subst">${{baz: <span class="hljs-literal">false</span>}</span>}`</span>; <span class="hljs-comment">// =&gt; 'foo bar'</span>
+classd<span class="hljs-string">`a <span class="hljs-subst">${[ <span class="hljs-string">'b'</span>, <span class="hljs-string">'c'</span>, <span class="hljs-literal">false</span> &amp;&amp; <span class="hljs-string">'d'</span> ]}</span>`</span>; <span class="hljs-comment">// =&gt; 'a b c'</span>
+classd<span class="hljs-string">`<span class="hljs-subst">${[<span class="hljs-string">'a'</span>, { b: <span class="hljs-number">1</span>, c: <span class="hljs-number">0</span> }</span>]}`</span>; <span class="hljs-comment">// 'a b'</span>
+classd<span class="hljs-string">`    a    b  \n  <span class="hljs-subst">${<span class="hljs-built_in">Array</span>(<span class="hljs-number">10</span>).fill(<span class="hljs-string">' '</span>)}</span> c`</span>; <span class="hljs-comment">// =&gt; 'a b c'</span></code></pre>
+<h3 id="installation-and-usage">Installation and usage</h3>
+<p>The <code>classd</code> package exports 4 functions:</p>
+<ol>
+<li><code>classd</code> (Tag for template literals, default)</li>
+<li><code>classDedupe</code> (Tag for template literals)</li>
+<li><code>classdFn</code> (Variadic function, for compatibility, similar to <code>classNames</code>)</li>
+<li><code>classDedupeFn</code> (Variadic function, for compatibility, similar to <code>classNames/dedupe</code>)</li>
+</ol>
+<p>The package is available on <a href="https://www.npmjs.com">NPM</a> can be installed using package managers like <code>npm</code> and <code>yarn</code>. It can also be pulled from CDN directly into your webpages.</p>
+<h4 id="install-using-package-manager">Install using package manager</h4>
+<pre><code class="language-bash"><span class="hljs-comment"># via npm </span>
+npm install --save classd
+
+<span class="hljs-comment"># or Yarn </span>
+yarn <span class="hljs-keyword">add</span><span class="bash"> classd</span></code></pre>
+<h4 id="use-in-es6-modules">Use in ES6 Modules</h4>
+<pre><code class="language-js">
+<span class="hljs-comment">// ES6 import (default - classd tag for template literals)</span>
+<span class="hljs-keyword">import</span> classd from <span class="hljs-string">'classd'</span>;
+
+<span class="hljs-comment">// example use</span>
+<span class="hljs-keyword">const</span> <span class="hljs-built_in">width</span> = <span class="hljs-number">1080</span>;
+<span class="hljs-keyword">const</span> classes = classd`container padding-${{
+    lg: <span class="hljs-built_in">width</span> &gt; <span class="hljs-number">1280</span>, 
+    md: <span class="hljs-built_in">width</span> &gt; <span class="hljs-number">960</span> &amp;&amp; <span class="hljs-built_in">width</span> &lt; <span class="hljs-number">1280</span>,
+    sm: <span class="hljs-built_in">width</span> &lt;= <span class="hljs-number">960</span>
+}} margin<span class="hljs-number">-0</span> ${<span class="hljs-built_in">width</span> &gt; <span class="hljs-number">960</span> &amp;&amp; <span class="hljs-string">'blue'</span>} ${<span class="hljs-built_in">width</span> &lt; <span class="hljs-number">960</span> &amp;&amp; <span class="hljs-string">'red'</span>}`;
+console.<span class="hljs-built_in">log</span>(classes); <span class="hljs-comment">// =&gt; 'container padding-md margin-0 blue'</span>
+
+
+<span class="hljs-comment">// ES6 import any of the exported functions</span>
+<span class="hljs-keyword">import</span> { classd, classDedupe, classdFn, classDedupeFn } from <span class="hljs-string">'classd'</span>;
+
+<span class="hljs-comment">// example use (of classdFn)</span>
+<span class="hljs-keyword">const</span> <span class="hljs-built_in">width</span> = <span class="hljs-number">1080</span>;
+<span class="hljs-keyword">const</span> classes = classdFn (<span class="hljs-string">'container'</span>, {
+    <span class="hljs-string">'padding-lg'</span>: <span class="hljs-built_in">width</span> &gt; <span class="hljs-number">1280</span>, 
+    <span class="hljs-string">'padding-md'</span>: <span class="hljs-built_in">width</span> &gt; <span class="hljs-number">960</span> &amp;&amp; <span class="hljs-built_in">width</span> &lt; <span class="hljs-number">1280</span>,
+    <span class="hljs-string">'padding-sm'</span>: <span class="hljs-built_in">width</span> &lt;= <span class="hljs-number">960</span>
+}, (<span class="hljs-built_in">width</span> &gt; <span class="hljs-number">960</span> &amp;&amp; <span class="hljs-string">'blue'</span>), <span class="hljs-string">'margin-0'</span>);
+console.<span class="hljs-built_in">log</span>(classes); <span class="hljs-comment">// =&gt; 'container padding-md blue margin-0'</span></code></pre>
+<h4 id="use-in-commonjs-modules-nodejs">Use in Commonjs modules (Nodejs)</h4>
+<pre><code class="language-js"><span class="hljs-regexp">//</span> commonjs <span class="hljs-built_in">require</span> classd tag <span class="hljs-keyword">for</span> template literals (<span class="hljs-keyword">default</span> <span class="hljs-keyword">export</span>)
+const classd = <span class="hljs-built_in">require</span>(<span class="hljs-string">'classd'</span>).<span class="hljs-keyword">default</span>
+
+<span class="hljs-regexp">//</span> commonjs <span class="hljs-built_in">require</span> any <span class="hljs-keyword">of</span> the exported functions
+const { classd, classDedupe, classdFn, classDedupeFn } = <span class="hljs-built_in">require</span>(<span class="hljs-string">'classd'</span>);
+
+<span class="hljs-regexp">//</span> commonjs <span class="hljs-built_in">require</span> classd <span class="hljs-built_in">module</span>
+const classd = <span class="hljs-built_in">require</span>(<span class="hljs-string">'classd'</span>); <span class="hljs-regexp">//</span> exports can be used <span class="hljs-keyword">as</span> classd.classd, classd.classDedupe etc</code></pre>
+<h4 id="pull-from-cdn">Pull from CDN</h4>
+<pre><code class="language-html">
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">src</span>=<span class="hljs-string">'https://cdn.jsdelivr.net/npm/classd@1.0/lib/index.js'</span>&gt;</span><span class="undefined"></span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span>
+<span class="hljs-tag">&lt;<span class="hljs-name">script</span> <span class="hljs-attr">type</span>=<span class="hljs-string">'text/javascript'</span>&gt;</span><span class="javascript">
+    <span class="hljs-keyword">const</span> { classd, classDedupe, classdFn, classDedupeFn } = <span class="hljs-built_in">window</span>.classd;
+    <span class="hljs-built_in">console</span>.log(classd<span class="hljs-string">`container <span class="hljs-subst">${<span class="hljs-number">1</span> &gt; <span class="hljs-number">0</span> &amp;&amp; <span class="hljs-string">'blue'</span>}</span>`</span>); <span class="hljs-comment">// =&gt; 'container blue'</span>
+</span><span class="hljs-tag">&lt;/<span class="hljs-name">script</span>&gt;</span> </code></pre>
+<h3 id="well-what-are-classdedupe-classdfn-and-classdedupefn-">Well, what are <code>classDedupe</code>, <code>classdFn</code> and <code>classDedupeFn</code> ?</h3>
+<p>The <code>classdFn</code> follows the same specifications as the <code>classd</code> tag. It&#39;s a straightforward replacement for <code>classNames</code>. Everything that&#39;s valid with <code>classNames</code> is also valid with <code>classdFn</code>. In addition, <code>classdFn</code> supports passing Maps, Sets, and other Iterables as arguments. Moreover it&#39;s slightly faster than <code>classNames</code> in general usage.</p>
+<p>If you want to migrate an existing project from using <code>classNames</code> to <code>classd</code>, using the <code>classdFn</code> is the fastest and simplest thing to do. The migration from <code>classNames</code> is as simple as:</p>
+<pre><code class="language-js"><span class="hljs-comment">// before</span>
+<span class="hljs-keyword">import</span> classNames <span class="hljs-keyword">from</span> <span class="hljs-string">'classnames'</span>;
+
+<span class="hljs-comment">//after</span>
+<span class="hljs-keyword">import</span> { classdFn <span class="hljs-keyword">as</span> classNames } <span class="hljs-keyword">from</span> <span class="hljs-string">'classd'</span>;</code></pre>
+<p>The <code>classDedupe</code> tag is an enhanced and about 60% slower version of the <code>classd</code> tag. It does everything that the <code>classd</code> tag does. In addition to that it checks for repeating names among the class names and ensures that each valid class name appears only once in the output string.</p>
+<p>The <code>classDedupeFn</code> is the function equivalent of the <code>classDedupe</code> tag. It follows the same signature as <code>classdFn</code> and <code>classNames</code>.</p>
+<p>It differs from the <code>classNames/dedupe</code> in the behaviour that, the <code>classNames/dedupe</code> unsets a class if a configuration object appearing later in its arguments unsets it; whereas <code>classDedupe</code> does not unset a class name once it&#39;s set.</p>
+<h3 id="what-about-performance-and-stability-">What about performance and stability ?</h3>
+<p>As conditionally applying class names is a common task in web frontend, and the functions are supposed to be called many times during a render cycle, it&#39;s imperative that the implementation of <code>classd</code> be highly performant and stable. Therefore we take the stability and performance of this package very seriously. Updates are thoroughly reviewed for performance impacts before being released. We maintain a comprehensive test suite to ensure stability.</p>
+<p>Here is a <strong><a href="https://jsperf.com/classd-v1-0-0-test-1">JSPerf benchmark</a></strong> of the <code>classd</code> package, compared against <code>classNames</code>. As we can see, the <code>classd</code> tag is as performant as <code>classNames</code>, while the <code>classdFn</code> is slightly faster.</p>
+<p><img src="https://thepracticaldev.s3.amazonaws.com/i/ffmeo7wjdrvkdllzcp9i.png" alt="JSPerf benchmark"></p>
+<h3 id="source-code-and-contributing">Source code and contributing</h3>
+<p>The source code is available on Github for you. Any contributions in the form of Pull Request, Issue or Suggestion are welcome. <strong>If you like it, please give it a star on Github.</strong></p>
+<p><a href="https://github.com/GnsP/classd">classd on Github</a></p>
+<p>Thanks for reading and do give it a try !</p>
+</article></main><aside><h4></h4><ul><li><h5>August 31, 2019</h5><h2><a href="https://gnsp.in/blog/posts/making-the-flag-of-india-using-pug-and-less-cLjONG/index.html">Making the flag of India using Pug and Less</a></h2><ul class="tags"><li><a href="https://gnsp.in/blog/categories/html.html">html</a></li><li><a href="https://gnsp.in/blog/categories/css.html">css</a></li><li><a href="https://gnsp.in/blog/categories/pug.html">pug</a></li><li><a href="https://gnsp.in/blog/categories/less.html">less</a></li></ul><p>In this article we shall make the national flag of India (the tricolour). As an aside and fun fact, a number of other countries have national flags featuring 3 colours and the Indian flag actually has 4 colours.<br/><span class="ellipsis">...</span></p></li></ul></aside><div class="footer"><h6>Powered by <a href='https://npmjs.com/package/ghournal'>ghournal</a></h6></div><script async src="https://static.codepen.io/assets/embed/ei.js"></script></body></html>

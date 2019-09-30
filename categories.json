@@ -5,8 +5,12 @@
         "a-tutorial-on-dynamic-programming-dp-GcvQKX"
     ],
     "ironscript": [],
-    "javascript": [],
-    "web": [],
+    "javascript": [
+        "opensourcing-classd-TbZb2U"
+    ],
+    "web": [
+        "opensourcing-classd-TbZb2U"
+    ],
     "html": [
         "making-the-flag-of-india-using-pug-and-less-cLjONG"
     ],
@@ -14,12 +18,15 @@
         "making-the-flag-of-india-using-pug-and-less-cLjONG"
     ],
     "css": [
+        "opensourcing-classd-TbZb2U",
         "making-the-flag-of-india-using-pug-and-less-cLjONG"
     ],
     "less": [
         "making-the-flag-of-india-using-pug-and-less-cLjONG"
     ],
-    "technology": [],
+    "technology": [
+        "opensourcing-classd-TbZb2U"
+    ],
     "blender": [],
     "3D": [],
     "cpp": [
@@ -38,5 +45,11 @@
     "logic": [
         "a-tutorial-on-dynamic-programming-dp-GcvQKX"
     ],
-    "mathematics": []
+    "mathematics": [],
+    "react": [
+        "opensourcing-classd-TbZb2U"
+    ],
+    "opensource": [
+        "opensourcing-classd-TbZb2U"
+    ]
 }
