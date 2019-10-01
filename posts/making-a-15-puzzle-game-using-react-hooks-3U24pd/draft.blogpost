@@ -17,7 +17,7 @@ _The 15-puzzle (also called Gem Puzzle, Boss Puzzle, Game of Fifteen, Mystic Squ
 However, the numbered variant of the puzzle is more or less that mathematical version of it. The ones sold in toy stores are generally the image variant of the game. In this variant, each of the tiles is a small square segment of an image and when the tiles are arranged in the correct order, the complete image takes form. Just like the following image (here the puzzle is in the scrambled state),
 
 
-![15 Puzzle](demo.png)
+![15 Puzzle](assets/demo.png)
 
 
 We will be building this specific variant of the puzzle in this article. When the tiles of this puzzle are arranged in the correct order, we will get an image of Rubeus Hagrid, the Gamekeeper and Keeper of Keys and Grounds of Hogwarts.
