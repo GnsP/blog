@@ -1,6 +1,7 @@
 {
     "filepath": "categories.json",
     "programming": [
+        "a-trie-problem-in-go",
         "making-a-15-puzzle-game-using-react-hooks-3U24pd",
         "software-development-at-zomato-kKa08C",
         "a-tutorial-on-dynamic-programming-dp-GcvQKX"
@@ -46,8 +47,11 @@
         "a-tutorial-on-dynamic-programming-dp-GcvQKX"
     ],
     "python": [],
-    "datastructures": [],
+    "datastructures": [
+        "a-trie-problem-in-go"
+    ],
     "algorithms": [
+        "a-trie-problem-in-go",
         "a-tutorial-on-dynamic-programming-dp-GcvQKX"
     ],
     "poem": [],
@@ -67,5 +71,8 @@
     ],
     "opensource": [
         "opensourcing-classd-TbZb2U"
+    ],
+    "golang": [
+        "a-trie-problem-in-go"
     ]
 }

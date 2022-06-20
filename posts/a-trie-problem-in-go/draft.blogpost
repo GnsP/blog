@@ -1,0 +1,415 @@
+title : Solving a string prefix problem using Trie in golang
+abstract : I came across a programming problem on finding matching strings from a list of strings for a given prefix and thought of solving it using golang. It's a good read for beginners learning the go programming language.
+cover_image: cover.jpg
+categories : golang, datastructures, algorithms, programming
+
+----------------------------------------------------------------------
+
+A few days ago we conducted a learning session on golang for my team at work. It was a short session covering
+the basics of the language. Since then, I had been thinking of writing a series of blogposts/tutorials about
+using these basic concepts to solve real algorithmic problems using golang. Today (Sunday, 19th June 2022) I
+came across this interesting problem about finding matching strings from a list of strings for a given prefix
+while browsing through some old folders on my laptop. I had solved this problem in Javascript some 3 years ago;
+today I decided to give it a 'Go' !
+
+### The problem
+
+This problem is available on leetcode, here is the [link](https://leetcode.com/problems/search-suggestions-system/).
+
+#### Problem statement
+
+You are given an array of strings `products` and a string `searchWord`.
+
+Design a system that suggests at most three product names from `products` after each character of `searchWord` is typed. 
+Suggested products should have common prefix with `searchWord`. If there are more than three products with a common prefix 
+return the three lexicographically minimum products.
+
+Return a _list of lists_ of the suggested products after each character of searchWord is typed.
+
+#### Constraints
+
++ `1 <= products.length <= 1000`
++ `1 <= products[i].length <= 3000`
++ `1 <= sum(products[i].length) <= 2 * 10^4`
++ All the strings of products are **unique**.
++ `products[i]` consists of lowercase English letters.
++ `1 <= searchWord.length <= 1000`
++ `searchWord` consists of lowercase English letters.
+
+#### Example testcases
+
+**Example 1**
+
+```
+Input: products = ["mobile","mouse","moneypot","monitor","mousepad"], searchWord = "mouse"
+Output: [
+  ["mobile","moneypot","monitor"],
+  ["mobile","moneypot","monitor"],
+  ["mouse","mousepad"],
+  ["mouse","mousepad"],
+  ["mouse","mousepad"]
+]
+```
+
+**Example 2**
+
+```
+Input: products = ["havana"], searchWord = "havana"
+Output: [["havana"],["havana"],["havana"],["havana"],["havana"],["havana"]]
+```
+
+**Example 3**
+
+```
+Input: products = ["bags","baggage","banner","box","cloths"], searchWord = "bags"
+Output: [["baggage","bags","banner"],["baggage","bags","banner"],["baggage","bags"],["bags"]]
+```
+
+### Solving the problem
+
+This problem is about finding matching strings from a list of strings `products` for each of the
+prefixes obtained from `searchWord` taking one character at a time and appending it to the previous
+prefix. For example, if the `searchWord` is `"cat"`, then the prefixes for which we need to find
+matching strings will be `["c", "ca", "cat"]`. For each of these prefixes we are to find 3 matching strings
+(in lexicographical order, ascending) from the array of strings `products`.
+
+This problem can be solved efficiently by using the datastructure **Trie** aka **Prefix tree**; by efficiently
+I mean with the worst case time conplexity of _O(M+n)_ where _M_ is the number of characters in the
+array `products` and _n_ is the length of `searchWord`. Before we start implementing the solution, let's have
+a quick overview of the **Trie** datastructure.
+
+#### Trie
+
+A trie is a k-ary search tree. It stores multiple words/strings by taking each cahracter as a node. If multiple
+words have the same prefix then they follow the same path from the root of the trie until the end of the common
+prefix. For example, if the list of words is `["CAT", "CAN", "BAT", "BAG"]` then the corresponding trie can be 
+visualised as the following diagram.
+
+![trie](assets/trie.png)
+
+Here the root node stands for the prefix empty string. As the empty string is a valid prefix for all strings in
+the list, all of them can be matched from the root node. Then we have the words `["CAT", "CAN"]` that have a common
+prefix `"C"` and the words `["BAT", "BAG"]` that have a common prefix `"B"`. Therefore the root node will have 2
+children nodes `B` and `C`. Similarly each of the children nodes `B` and `C` will have one child node each, standing
+for `A`; at this point the prefixes for the respective paths would be `"BA"` and `"CA"` and so on.
+
+You can read more about Tries [here](https://en.wikipedia.org/wiki/Trie).
+
+#### Implementing the solution
+
+In this problem, we want to store only 3 matching words (sorted in lexicographical order) from `products` at each node.
+So, each node will have an array of 3 strings to store the matches and a list of pointers to its children.
+
+Let's define this trie structure in go. To make things more space efficient, rather than storing the actual matching
+strings in each node, we can store their indices in the `products` array and then look up the actual strings using 
+these indices when we need to output the actual strings. The lexicographical ordering can be easily handled by sorting
+the `products` array once. (Think why ?) We can create a `struct` type to define each node of the trie like the following:
+
+```go
+type trie struct {
+  words [3]int
+  wordsLen int
+  children map[string]*trie
+}
+```
+
+Here `children` is a map from strings to pointers to child nodes of the trie node. A tree is a recusrive datastructure,
+and it's efficient to strore pointers to child nodes on each node of the trie. The `wordsLen` field is to keep track of
+how many entries in the `words` array are valid indices. In golang, `int` values default to `0`, and `0` can be a valid
+index in the `products` array even when the `0th` string in the `products` is not a matching string for the node. Therefore
+it's necessary to keep track of where the valid indices end inside the `words` array.
+
+As the trie struct has a map field declared inside it and we can not use it before initializing the map, let's also
+write a helper function to create a trie node, initialize the map and return a pointer to the node.
+
+```go
+func newTrie () *trie {
+  var t trie
+
+  // initialize the map
+  t.children = make(map[string]*trie)
+
+  // return the pointer to the trie node
+  return &t
+}
+```
+
+Now that we have the trie structure in place, let's write a method to insert words into it. If a word is among
+the 3 lexicographically smallest matching strings for a node, then we need to store its index in the words array
+of that node (and increment the `wordsLen` field). If we have already stored the 3 lexicographcally minimum matching
+strings for a node, then we do not need to store the word in that node and we can move to its child nodes recursively.
+
+The method needs to take the word, its index in the `products` array and the current character of the word being inserted
+into the trie node as arguments. If the trie node does not have a child for the current character, then we need to 
+create a trie node and add it to the `children` map against the current character.
+
+```go
+// Here index is the index of the word in products
+// and pos is the index of the current character being added to the trie
+
+func (t *trie) insertWord (word string, index int, pos int) int{
+
+  // if we have not found 3 matching strings yet, then store the word (index)
+  if t.wordsLen < 3 {
+    t.words[t.wordsLen] = index
+    t.wordsLen += 1
+  }
+
+  // if we have reached the end of the word, then do nothing else and return
+  if pos == len(word) {
+    return 0
+  }
+
+  // get the current character and check if there is a child node for that character
+  // if not, then create a new trie node and add it to children
+  ch := string(word[pos])
+  if t.children[ch] == nil {
+    t.children[ch] = newTrie()
+  }
+
+  // recursively insert the word in the corresponding child node
+  t.children[ch].insertWord(word, index, pos+1)
+  return 0
+}
+```
+
+Now that we have the trie structure and the method to insert strings in it, let's write the function
+to find matching strings for the prefixes. This function will take the array of strings `products` and
+the string `searchWord` as arguments and return a slice of slice of strings with the matching products
+for each of the prefixes of the `searchWord`.
+
+First we need to sort the slice `products` lexicographically. We can use the native package `sort` to
+do this. Then we need to initialize the trie and insert all words in `products` into it.
+
+Then we can traverse the trie from root, taking one character at a time from the `searchWord`. We will
+initialize the current trie node to `root` and `mismatched` flag to `false`. For each chacater of
+the `searchWord` we need to check if the current node has a child corresponding to the character. If 
+there is a child node, then we have a match and we add the `words` array of that node to the return slice
+and set the child node as the current node. If there is no child node corresponding to the character, then
+we have a mismatch and all subsequent entries in the return slice will be empty, we will set the `mismatched`
+flag to `true` to keep track of this. This is a standard depth first traversal of the trie and it can be
+implemented like the following.
+
+```go
+func suggestedProducts(products []string, searchWord string) [][]string {
+  
+  // sort the products slice
+  sort.Strings(products)
+
+  // initialize the trie and insert all words in products into it
+  root := *newTrie()
+  for i, word := range products {
+    root.insertWord(word, i, 0)
+  }
+
+  // declare the return value, the mismatched flag and current trie node to root
+  var ret [][]string
+  mismatched := false
+  t := root
+
+  // for each character of the searchWord traverse the trie and find matching words
+  // if we are unable to find any matches at any point then we can set the mismatched
+  // flag to true and all subsequent matches will be empty slices.
+
+  for _, ch := range searchWord {
+    ch := string(ch)
+    if t.children[ch] == nil || mismatched {
+      list := make([]string, 0)
+      ret = append(ret, list)
+      mismatched = true
+      continue
+    }
+
+    t = *t.children[ch]
+    var list []string
+    var i int
+    for i=0; i<t.wordsLen; i+=1 {
+      list = append(list, products[t.words[i]])
+    }
+    ret = append(ret, list)
+  }
+  return ret
+}
+```
+
+This concludes our solution. But we need to test it against the example test cases to be sure 
+that it's indeed a correct solution for the given problem.
+
+#### Testing
+
+In golang, testing is a really simple process. Go standard library has the testing package to help
+us test and benchmark our implementations with ease. Go automatically detects test files from the
+filenames; if a filename ends with `_test.go` then go considers that file to be a test file.
+Inside a test file, the functions that start with `Test` and take one argument of the type `*testing.T`
+are run by the test runner automatically. Similarly functions that start with `Benchmark` and take one
+argument of the type `*testing.B` are run for benchmarking. In case of our solution, we are focused on
+the unit testing of our solution. So we can write a function `TestSuggestedProducts` and add our testcases
+inside it. We can use the standard library package `reflect` to check if the output and expected slices are
+deeply equal. The following is the complete code for this problem along with the test function.
+
+```go
+package dsproblems
+
+import (
+  "sort"
+  "testing"
+  "reflect"
+  "fmt"
+)
+
+type trie struct {
+  words [3]int
+  wordsLen int
+  children map[string]*trie
+}
+
+func newTrie () *trie {
+  var t trie
+  t.children = make(map[string]*trie)
+  return &t
+}
+
+func (t *trie) insertWord (word string, index int, pos int) int{
+  if t.wordsLen < 3 {
+    t.words[t.wordsLen] = index
+    t.wordsLen += 1
+  }
+
+  if pos == len(word) {
+    return 0
+  }
+
+  ch := string(word[pos])
+  if t.children[ch] == nil {
+    t.children[ch] = newTrie()
+  }
+  t.children[ch].insertWord(word, index, pos+1)
+  return 0
+}
+
+func suggestedProducts(products []string, searchWord string) [][]string {
+  sort.Strings(products)
+
+  root := *newTrie()
+  for i, word := range products {
+    root.insertWord(word, i, 0)
+  }
+
+  var ret [][]string
+  mismatched := false
+  t := root
+  for _, ch := range searchWord {
+    ch := string(ch)
+    if t.children[ch] == nil || mismatched {
+      list := make([]string, 0)
+      ret = append(ret, list)
+      mismatched = true
+      continue
+    }
+
+    t = *t.children[ch]
+    var list []string
+    var i int
+    for i=0; i<t.wordsLen; i+=1 {
+      list = append(list, products[t.words[i]])
+    }
+    ret = append(ret, list)
+  }
+  return ret
+}
+
+func TestSuggestedProducts(t *testing.T) {
+  products := []string{"mobile","mouse","moneypot","monitor","mousepad"}
+  searchWord := "mouse"
+  output := [][]string{
+    {"mobile","moneypot","monitor"}, 
+    {"mobile","moneypot","monitor"}, 
+    {"mouse","mousepad"}, 
+    {"mouse","mousepad"}, 
+    {"mouse","mousepad"},
+  }
+  fmt.Println(output)
+  if !reflect.DeepEqual(suggestedProducts(products, searchWord), output) {
+    t.Fatalf("Failed testcase #1")
+  }
+
+  products = []string{"havana"}
+  searchWord = "havana"
+  output = [][]string{
+    {"havana"}, 
+    {"havana"}, 
+    {"havana"}, 
+    {"havana"}, 
+    {"havana"}, 
+    {"havana"},
+  }
+  fmt.Println(output)
+  if !reflect.DeepEqual(suggestedProducts(products, searchWord), output) {
+    t.Fatalf("Failed testcase #2")
+  }
+
+  products = []string{"bags","baggage","banner","box","cloths"}
+  searchWord = "bags"
+  output = [][]string{
+    {"baggage","bags","banner"}, 
+    {"baggage","bags","banner"}, 
+    {"baggage","bags"}, 
+    {"bags"},
+  }
+  fmt.Println(output)
+  if !reflect.DeepEqual(suggestedProducts(products, searchWord), output) {
+    t.Fatalf("Failed testcase #3")
+  }
+}
+```
+
+So, that's that and we just solved the problem using the trie datastructure in golang. Also, here is an
+implementation of the same solution in Javascript for reference.
+
+
+```js
+class Trie {
+  constructor(words=[], children={}) {
+    this.words = words;
+    this.children = children;
+  }
+
+  insertWord(word, i, j) {
+    if (this.words.length < 3)
+      this.words.push(i);
+
+    if (j === word.length)
+      return;
+
+    const ch = word.charAt(j);
+    if (this.children[ch] === undefined) {
+      this.children[ch] = new Trie();
+    }
+    this.children[ch].insertWord(word, i, j+1);
+  }
+}
+
+function suggest(words, search) {
+  const sortedWords = [...words];
+  sortedWords.sort((a, b) => a.localeCompare(b));
+
+  const trie = new Trie();
+  sortedWords.forEach((word, i) => {
+    trie.insertWord(word, i, 0);
+  });
+
+  return search.split('').reduce((acc, ch) => {
+    if (acc.t.children[ch] === undefined || acc.done) {
+      acc.ret.push([]);
+      acc.done = true;
+      return acc;
+    }
+
+    acc.t = acc.t.children[ch];
+    acc.ret.push(acc.t.words.map(ind => sortedWords[ind]));
+    return acc;
+  }, {ret: [], t: trie, done: false}).ret;
+}
+```
+
+Hoping you had a nice read and learned something new from this article. Have nice days ahead. :)

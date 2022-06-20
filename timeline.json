@@ -49,5 +49,13 @@
             }
         ]
     },
+    "2022": {
+        "June": [
+            {
+                "postID": "a-trie-problem-in-go",
+                "date": 19
+            }
+        ]
+    },
     "filepath": "timeline.json"
 }

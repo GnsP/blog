@@ -135,5 +135,22 @@
             "programming"
         ],
         "abstract": "We are making a what !<br/>In this article, we will make a simple 15-Puzzle using React Hooks, but what is a 15-Puzzle in the first place ?<br/><br/><span class=\"ellipsis\">...</span>"
+    },
+    "a-trie-problem-in-go": {
+        "filepath": "./posts/a-trie-problem-in-go/post.json",
+        "title": "Solving a string prefix problem using Trie in golang",
+        "abstract": "A few days ago we conducted a learning session on golang for my team at work. It was a short session covering<br/>the basics of the language. Since then, I had been thinking of writing a series of blogposts/tutorial<span class=\"ellipsis\">...</span>",
+        "id": "a-trie-problem-in-go",
+        "created": "June 19, 2022",
+        "modified": "June 19, 2022",
+        "published": true,
+        "categories": [
+            "golang",
+            "datastructures",
+            "algorithms",
+            "programming"
+        ],
+        "href": "https://gnsp.in/blog/posts/a-trie-problem-in-go/index.html",
+        "cover_image": "https://gnsp.in/blog/posts/a-trie-problem-in-go/assets/cover.jpg"
     }
 }
