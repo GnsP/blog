@@ -152,5 +152,17 @@
         ],
         "href": "https://gnsp.in/blog/posts/a-trie-problem-in-go/index.html",
         "cover_image": "https://gnsp.in/blog/posts/a-trie-problem-in-go/assets/cover.jpg"
+    },
+    "backup-android-phone-files-on-gcs": {
+        "filepath": "./posts/backup-android-phone-files-on-gcs/post.json",
+        "title": "How to back up files (from an android phone) on GCS",
+        "abstract": "This guide outlines a command-line workflow for backing up files from an Android device to Google Cloud Storage (GCS). It&#39;s designed for technically experienced users who are comfortable with shell scripting and command-line interfaces like adb a<span class=\"ellipsis\">...</span>",
+        "id": "backup-android-phone-files-on-gcs",
+        "created": "June 30, 2025",
+        "modified": "June 30, 2025",
+        "published": true,
+        "categories": [],
+        "href": "https://gnsp.in/blog/posts/backup-android-phone-files-on-gcs/index.html",
+        "cover_image": false
     }
 }

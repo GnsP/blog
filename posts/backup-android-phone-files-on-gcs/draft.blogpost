@@ -1,0 +1,89 @@
+title : How to back up files (from an android phone) on GCS
+abstract : This article details a command-line workflow for backing up files from an Android device to Google Cloud Storage (GCS). The process leverages the Android Debug Bridge (adb) and the Google Cloud CLI (gcloud) to create an efficient, scriptable solution for technically proficient users. 
+categories : 
+
+----------------------------------------------------------------------
+This guide outlines a command-line workflow for backing up files from an Android device to Google Cloud Storage (GCS). It's designed for technically experienced users who are comfortable with shell scripting and command-line interfaces like `adb` and `gcloud`.
+
+The process involves connecting to the device via the Android Debug Bridge (adb), generating a list of target files, processing that list, pulling the files to a local machine, and finally, uploading them to a GCS bucket.
+
+-----
+
+## Prerequisites
+
+Before starting, ensure your environment is correctly configured.
+
+1.  **Android Debug Bridge (adb):** The `adb` CLI tool must be installed and available in your system's PATH. On macOS, this can be installed via Homebrew: `brew install android-platform-tools`.
+
+2.  **Google Cloud CLI:** The `gcloud-cli` must be installed and authenticated.
+
+3.  **Device Configuration:**
+
+      * **Developer Mode:** Enable Developer Options on the Android device. This is typically done by navigating to **Settings** \> **About phone** and tapping the **Build number** seven times.
+      * **USB Debugging:** Within Developer Options, enable the **USB Debugging** toggle.
+
+    **Note:** For security reasons, it's recommended to disable Developer Options after you have completed the backup, as some applications (eg. Government services apps like digilocker)  may refuse to run while it is active.
+
+-----
+
+## The Backup Workflow
+
+### **Step 1: Device Connection and Verification**
+
+Connect the Android device to your computer via USB. Authorize the USB debugging connection on the device when prompted. Verify the connection by running `adb devices`. The output should list your device's serial number with a status of `device`.
+
+### **Step 2: File Discovery**
+
+Run `adb shell` in a terminal on the laptop/desktop to open a shell on the device and execute standard Linux commands for file discovery. Use pattern matching to filter for specific files. For example, to list all MP4 files from June 2021 in the default Samsung camera directory, you would run:
+
+```bash
+adb shell 'ls /sdcard/DCIM/Camera/202106*.mp4'
+```
+
+Identify the correct source directories and file patterns for the data you intend to back up.
+
+### **Step 3: Processing the File List for Ingestion**
+
+The raw output from `adb shell ls` requires sanitization before it can be reliably used in a pipeline.
+
+1.  **Line Ending Normalization:** The `adb shell` may output Windows-style CRLF (`\r\n`) line endings. To ensure POSIX compatibility with tools like `xargs`, convert these to LF (`\n`) by piping the output through `tr -d '\r'`.
+
+2.  **Path Manipulation:** While `adb pull` can often handle absolute paths, it's common practice to strip the leading `/` for consistency. This can be achieved by piping the output through `sed -e 's/^\///'`.
+
+### **Step 4: Pulling Files to the Local Machine**
+
+To automate the process of pulling each file, pipe the sanitized list of file paths to `xargs`. This command will execute `adb pull` for each line of input it receives.
+
+The complete command to find, process, and pull the files to a local directory looks like this:
+
+```bash
+# Template
+adb shell 'ls /<source_pattern>' | tr -d '\r' | sed -e 's/^\///' | xargs -n1 -I {} adb pull {} <local_destination_path>
+
+# Example: Pulls videos from June 2021 on the phone to `~/Videos/backup` directory on laptop
+adb shell 'ls /sdcard/DCIM/Camera/202106*.mp4' | tr -d '\r' | sed -e 's/^\///' | xargs -n1 -I {} adb pull {} ~/Videos/backup
+```
+
+  * `xargs -n1`: Executes the `adb pull` command once for each input line.
+  * `xargs -I {}`: Replaces the placeholder `{}` with the input line (the file path).
+
+### **Step 5: Uploading to Google Cloud Storage**
+
+We would assume that you have already created a GCS bucket to store the files. The bucket creation can be done using the cloud console (UI) or using the gcloud cli. We recommend the UI based option, as it also displays information about the billing imapct upfront.
+
+Once the files are on your local machine and the GCS bucket is set-up, use `gcloud storage cp` with the `--recursive` flag to upload the entire directory to your GCS bucket. For significantly faster uploads, especially with a large number of files, include the `-m` flag to enable parallel operations.
+
+```bash
+gcloud storage cp -m /path/to/local/directory gs://your-bucket-name/ --recursive
+```
+
+-----
+
+## Conclusion and Further Optimizations
+
+This workflow provides a powerful, scriptable method for backing up Android data to GCS. For ongoing or incremental backups, consider using `gcloud storage rsync` instead of `gcloud storage cp`, as it will only transfer new or modified files, making subsequent backups much faster.
+
+For cost optimization, you can further enhance this process:
+
+  * **Compression:** Archive and compress the files locally before the `gcloud` upload to reduce storage footprint and egress costs.
+  * **Storage Tier:** If the data is for archival purposes and will be accessed infrequently (less than once a year), select the **Archive** storage class for your GCS bucket to significantly lower storage costs.
