@@ -1,6 +1,5 @@
 <!DOCTYPE html><html lang="en"><head><title>How to back up files (from an android phone) on GCS | Languoric</title><meta name="viewport" content="initial-scale=1.0"><link rel="stylesheet" href="https://gnsp.in/blog/assets/style.css"><link rel="stylesheet"></head><body><header><h3><a href="https://gnsp.in/blog">Ganesh Prasad's blog</a></h3><nav><ul><li><a href="https://gnsp.in">gnsp.in</a></li></ul></nav></header><main><h1>How to back up files (from an android phone) on GCS</h1><h5>June 30, 2025</h5><ul class="tags"></ul><article><p>This guide outlines a command-line workflow for backing up files from an Android device to Google Cloud Storage (GCS). It&#39;s designed for technically experienced users who are comfortable with shell scripting and command-line interfaces like <code>adb</code> and <code>gcloud</code>.</p>
 <p>The process involves connecting to the device via the Android Debug Bridge (adb), generating a list of target files, processing that list, pulling the files to a local machine, and finally, uploading them to a GCS bucket.</p>
-<hr>
 <h2 id="prerequisites">Prerequisites</h2>
 <p>Before starting, ensure your environment is correctly configured.</p>
 <ol>
@@ -16,7 +15,6 @@
 <p><strong>Note:</strong> For security reasons, it&#39;s recommended to disable Developer Options after you have completed the backup, as some applications (eg. Government services apps like digilocker)  may refuse to run while it is active.</p>
 </li>
 </ol>
-<hr>
 <h2 id="the-backup-workflow">The Backup Workflow</h2>
 <h3 id="step-1-device-connection-and-verification"><strong>Step 1: Device Connection and Verification</strong></h3>
 <p>Connect the Android device to your computer via USB. Authorize the USB debugging connection on the device when prompted. Verify the connection by running <code>adb devices</code>. The output should list your device&#39;s serial number with a status of <code>device</code>.</p>
@@ -48,7 +46,6 @@ adb shell <span class="hljs-string">'ls /sdcard/DCIM/Camera/202106*.mp4'</span> 
 <p>We would assume that you have already created a GCS bucket to store the files. The bucket creation can be done using the cloud console (UI) or using the gcloud cli. We recommend the UI based option, as it also displays information about the billing imapct upfront.</p>
 <p>Once the files are on your local machine and the GCS bucket is set-up, use <code>gcloud storage cp</code> with the <code>--recursive</code> flag to upload the entire directory to your GCS bucket. For significantly faster uploads, especially with a large number of files, include the <code>-m</code> flag to enable parallel operations.</p>
 <pre><code class="language-bash">gcloud <span class="hljs-keyword">storage</span> cp -m /<span class="hljs-type">path</span>/<span class="hljs-keyword">to</span>/<span class="hljs-keyword">local</span>/directory gs://your-bucket-<span class="hljs-type">name</span>/ <span class="hljs-comment">--recursive</span></code></pre>
-<hr>
 <h2 id="conclusion-and-further-optimizations">Conclusion and Further Optimizations</h2>
 <p>This workflow provides a powerful, scriptable method for backing up Android data to GCS. For ongoing or incremental backups, consider using <code>gcloud storage rsync</code> instead of <code>gcloud storage cp</code>, as it will only transfer new or modified files, making subsequent backups much faster.</p>
 <p>For cost optimization, you can further enhance this process:</p>

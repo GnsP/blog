@@ -7,7 +7,6 @@ This guide outlines a command-line workflow for backing up files from an Android
 
 The process involves connecting to the device via the Android Debug Bridge (adb), generating a list of target files, processing that list, pulling the files to a local machine, and finally, uploading them to a GCS bucket.
 
------
 
 ## Prerequisites
 
@@ -23,8 +22,6 @@ Before starting, ensure your environment is correctly configured.
       * **USB Debugging:** Within Developer Options, enable the **USB Debugging** toggle.
 
     **Note:** For security reasons, it's recommended to disable Developer Options after you have completed the backup, as some applications (eg. Government services apps like digilocker)  may refuse to run while it is active.
-
------
 
 ## The Backup Workflow
 
@@ -76,8 +73,6 @@ Once the files are on your local machine and the GCS bucket is set-up, use `gclo
 ```bash
 gcloud storage cp -m /path/to/local/directory gs://your-bucket-name/ --recursive
 ```
-
------
 
 ## Conclusion and Further Optimizations
 
