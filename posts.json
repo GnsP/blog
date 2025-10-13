@@ -164,5 +164,33 @@
         "categories": [],
         "href": "https://gnsp.in/blog/posts/backup-android-phone-files-on-gcs/index.html",
         "cover_image": false
+    },
+    "a-brief-discussion-on-range-query-algorithms": {
+        "filepath": "./posts/a-brief-discussion-on-range-query-algorithms/post.json",
+        "title": "A brief discussion on range query algorithms",
+        "abstract": "In this post, we discus a series of range query problems (in progressively increasing difficulty) and their solutions. We present some general ideas on how to approach these kind of problems with confidence.",
+        "id": "a-brief-discussion-on-range-query-algorithms",
+        "created": "September 21, 2025",
+        "modified": "September 21, 2025",
+        "published": false,
+        "categories": []
+    },
+    "otw-bandit": {
+        "filepath": "./posts/otw-bandit/post.json",
+        "title": "Playing the wargame Bandit on OverTheWire, Part - 1",
+        "abstract": "What is the Bandit wargame ?<br/>OverTheWire.org is an useful website for beginners on cybersecurity. It hosts a number<br/>of wargames to teach basic concepts in cybersecurity. A <span class=\"ellipsis\">...</span>",
+        "id": "otw-bandit",
+        "created": "October 13, 2025",
+        "modified": "October 13, 2025",
+        "published": true,
+        "categories": [
+            "cybersecurity",
+            "web",
+            "python",
+            "scripting",
+            "linux"
+        ],
+        "href": "https://gnsp.in/blog/posts/otw-bandit/index.html",
+        "cover_image": false
     }
 }

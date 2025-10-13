@@ -63,6 +63,18 @@
                 "postID": "backup-android-phone-files-on-gcs",
                 "date": 30
             }
+        ],
+        "September": [
+            {
+                "postID": "a-brief-discussion-on-range-query-algorithms",
+                "date": 21
+            }
+        ],
+        "October": [
+            {
+                "postID": "otw-bandit",
+                "date": 13
+            }
         ]
     },
     "filepath": "timeline.json"

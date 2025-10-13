@@ -14,6 +14,7 @@
         "opensourcing-classd-TbZb2U"
     ],
     "web": [
+        "otw-bandit",
         "making-a-15-puzzle-game-using-react-hooks-3U24pd",
         "classnames-vs-es6-template-literals-b3B78q",
         "opensourcing-classd-TbZb2U"
@@ -46,7 +47,9 @@
     "cpp": [
         "a-tutorial-on-dynamic-programming-dp-GcvQKX"
     ],
-    "python": [],
+    "python": [
+        "otw-bandit"
+    ],
     "datastructures": [
         "a-trie-problem-in-go"
     ],
@@ -74,5 +77,14 @@
     ],
     "golang": [
         "a-trie-problem-in-go"
+    ],
+    "cybersecurity": [
+        "otw-bandit"
+    ],
+    "scripting": [
+        "otw-bandit"
+    ],
+    "linux": [
+        "otw-bandit"
     ]
 }

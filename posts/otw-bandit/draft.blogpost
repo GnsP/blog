@@ -1,0 +1,258 @@
+title : Playing the wargame Bandit on OverTheWire, Part - 1
+abstract : In this post I will outline my solutions to the wargame Bandit available on OverTheWire. So, spoiler alert! I recommend playing the game first, before reading this post. It's a free-of-cost game for beginners on basics of cyber-security.
+categories : cybersecurity, web, python, scripting, linux
+
+----------------------------------------------------------------------
+
+## What is the Bandit wargame ?
+
+[OverTheWire.org](https://overthewire.org/wargames) is an useful website for beginners on cybersecurity. It hosts a number
+of wargames to teach basic concepts in cybersecurity. A wargame is essentially an online game where the player hacks into
+provided hosts / servers to find hidden pieces of information to proceed to next levels. This provides some hands-on experience
+on how to exploit a server with certain vulnerabilities as well as how to protect against them. 
+
+[Bandit](https://overthewire.org/wargames/bandit) is one such wargame hosted on OverTheWire. This is the simplest and most
+beginner friendly wargame on this host. It focuses on usage of basic unix commands and basics of various security featues on
+linux / unix. It consists of 33 levels. Player starts with Level 0, where the initial username-password is given to the player.
+Then on each level, some instrustions are given to the user to find the passord for the next level. 
+
+In this series of posts, I will go through each level and talk about how I approached and solved each of them. **My solutions may or
+may not be similar to the canonical, most discussed solutions. My solutions may or may not be the best, most efficient either.**
+My goal is to use my prior knowledge and expertise to find ways to solve the levels. I do not know each and every linux/command
+available, neither do I remember the flags, options supported by most of the commands (unless I actually use the commands
+frequently enough). But I do know some of the most common linux commands and their usage at an intermediate level, I also know
+programming fairly well (especially in C and Python). I will try to leverage my existing knowledge to find solutions. I may also
+use `man` to look up documentation of certain commands, may even search specific concepts on the internet (though I will try to
+limit the number of times I have to search the internet). The goal is to have fun with this wargame and to keep a note of the process
+as I go.
+
+This is the Part 1 of this series of posts. We will cover levels 0 to 11 in this part. In the next part we will start from
+level 12. So, lets get started.
+
+## Prerequisites
+
+Players must have a terminal application and a web browser to play this. For linux and mac users, it's fairly straightforward.
+For windows users, I would recommend using a linux based terminal by installing `wsl` (Windows subsystem for Linux) and then running
+a ubuntu or kali-linux based terminal from powershell using the `wsl -d <distro-name>`.
+
+A working knowledge of basic unix commands, file system and python would also be required.
+
+## Level 0 --> Level 1
+
+In Level 0, we are given the host, port, username and password to this level right away. **The host (bandit.labs.overthewire.org) 
+and port (2220) is same for all levels**. For each level, the username is of the format `bandit{level}`, eg. for Level 1, 
+the username will be `bandit1`. And we will have to login to each level using `ssh` and try to find the password for the next level.
+
+For Level 0, we can login using `ssh bandit.labs.overthewire.org -p 2220 -l bandit0`. _The `-l` flag is for the `login_name`, which is
+essentially the username._ Then it'll ask for the password. For Level 0 the password is `bandit0`.
+
+As per the instruction, the password for level 1 is in a file named `readme`. Let's run `ls -al` in the home directory and check if
+there is indeed a file called `readme`. There is one. Now let's see what's inside it by running `cat readme`. This does have the 
+password for the next level in the last line. Let's copy it and `logout` (or `exit`).
+
+## Leval 1 --> Level 2
+
+Let's login to Level 1 using `ssh bandit.labs.overthewire.org -p 2220 -l bandit1` and then pasting the password copied from the last level.
+The instructions say that the password is in the file named `-`. Running `ls` confirms that there is a file named `-` in the home directory.
+But `cat -` won't work to display the contents (find why ?). So we need to find another way to look at its contents. A simple approach is
+to programmatically read the file and print the contents using python. Let's run `python3` and use the following single liner to get the
+contents. 
+
+```python
+print(open('-', 'r').read())
+```
+It prints the password. Now let's copy it and exit (first from the python prompt and then from the ssh session).
+
+## Level 2 --> Level 3
+
+Let's login to Level 2 using `ssh bandit.labs.overthewire.org -p 2220 -l bandit2` and then pasting the password copied from the last level.
+In level 2 the password for the next level is stored in a file called `--spaces in this filename--` located in the home directory.
+
+So, we do not really need to think much, and just use the same method as the last level (use python) to get the password.
+
+```python
+print(open('--spaces in this filename--', 'r').read())
+```
+
+## Level 3 --> Level 4
+
+Let's login to Level 3 using the password obtained from the last level as usual. The instructions say that the password is in a hidden file
+in a directory named `inhere`. In linux hidden filenames start with `.`. Let's just run `ls -al inhere` to see all the files inside the `inhere`
+directory. There is a file named `...Hiding-From-You` in this directory. We can simply run cat to print the contents of this file.
+
+```bash
+cat inhere/...Hiding-From-You
+```
+
+## Level 4 --> Level 5
+
+Let's login to Level 4. The instruction says "The password for the next level is stored in the only human-readable file in 
+the inhere directory. Tip: if your terminal is messed up, try the `reset` command." It means, there should be at least one
+text file in the `inhere` directory, rest of the files must be binary.
+
+Running `ls inhere` from the home directory confirms that there are 10 files with names like `-file00`, `-file01` ... to `-file09`.
+Of course, we won't `cat` them (as they start with -). We will use python to check and print the contents. But at this point,
+we do not know which files text and which are binary. So we will try to open them as text files using python, this should fail for
+binary files work only for the text files. We can wrap this logic in a try block and ignore the errors to print only the text file.
+
+```python
+import os
+
+filenames = os.listdir('inhere')
+for filename in filenames:
+    try:
+        print(open('inhere/' + filename, 'r').read())
+    except:
+        pass  
+```
+
+## Level 5 --> Level 6
+
+Let's login to Level 5. As per the instructions the password should be in a file inside `inhere` that meets the following criteria.
+
+- human-readable
+- 1033 bytes in size
+- not executable
+
+It means, the file must not be a binary, its size should be exactly 1033 bytes and it should not have the `x` flags set in its permissions.
+Let's first list all the files in the `inhere` directory using `find` and then for each file run `ls -l <filename>` to get the size and
+permission information. This can be done using
+
+```bash
+find inhere -type f
+```
+The `-type f` option tells `find` to output only files (not directories). Find does this recursively. This lists all the filenames inside
+the `inhere` directory and its subdirectories. But here we see that some files have spaces in their names. So we need to wrap the filenames
+with double quotes before passing them to `ls -l`.
+
+```bash
+find inhere -type f | xargs -L 1 -I % ls -l "%"
+```
+
+The `-L 1` option tells `xargs` to consume the output of the previous command (`find ...` in this case) one line at a time. The `-I %` tells
+that `xargs` will use the placeholder `%` for the actual filename (input for the actual command run per line by `xargs` ; in this case `ls -l`).
+
+This indeed prints the list of files with the size and permissions. We are interested in a file that has size 1033 bytes. Let's just
+pipe the list of file infos to `grep` and find the lines that have "1033" as a substring.
+
+```bash
+find inhere -type f | xargs -L 1 -I % ls -l "%" | grep 1033
+```
+
+This gives us just one file. And this file does not have the `x` flag set in its permissions (it's not executable). 
+We do not need to search further, this is our file. We need to get its contents. Using `cat` we can print its contents and get the password.
+
+## Level 6 --> Level 7
+
+Let's login to Level 6. The instruction says that the password for the next level is stored somewhere on the server and 
+has all of the following properties:
+
+- owned by user bandit7
+- owned by group bandit6
+- 33 bytes in size
+
+This means the file with the password can be anywhere under the `root` directory (not just the home directory of the user bandit6).
+Let's try to find all files that are owned by user bandit7 and group bandit6 under `/`.
+
+```bash
+find / -type f -user bandit7 group bandit6
+```
+
+It prints a long list of files. All, except one, of which have the string `permission denied`. Just one file `/var/lib/dpkg/info/bandit7.password`
+does not print with error. This must be the one. Using `cat` we can see that it indeed has the password.
+
+## Level 7 --> Level 8
+
+Let's login to level 7. The instruction says "The password for the next level is stored in the file data.txt next to the word millionth."
+There is an file named `data.txt` in the home directory. Running `cat data.txt` prints a long list of words and random strings. We need the
+random string next to the word 'millionth'. Let's pipe the contents of the file to `grep` and find the line with 'millionth'.
+
+```bash
+cat data.txt | grep millionth
+```
+
+There is just one line with the word 'millionth' and it has the password.
+
+## Level 8 --> Level 9
+
+Let's login to level 8. The instruction says the password for the next level is stored in the file data.txt and is the only line 
+of text that occurs only once. We can solve this easily using python. We just need to read the file `data.txt`, split it to lines,
+then get the count of occurances for each line (maybe using a Counter collection), check for a key with count 1.
+
+```python3
+from collections import Counter
+
+lines = open('data.txt', 'r').read().split('\n')
+lineCounts = Counter(lines)
+for key in lineCounts:
+  if lineCounts[key] == 1:
+    print(key)
+```
+
+The printed line is the password.
+
+## Level 9 --> Level 10
+
+Let's login to level 9. The instruction says that the password for the next level is stored in the file data.txt in one of the few 
+human-readable strings, preceded by several ‘=’ characters. 
+
+Again we can use python to process the data.txt file. Trying to open the file as a text file does not work. Despite the `txt` extension
+it seems to be a binary file. I got the contents of the file and printed it as byte string. There are only 3 places where mutiple
+`=` charcters can be seen (the human eye does pick up patterns quicky), only one of these seems to be the password (it's obvious).
+
+```python
+print(open('data.txt', 'rb').read())
+```
+
+## Level 10 --> Level 11
+
+Let's login to Level 10. The instruction says the password is in the file data.txt in base64 encoded format. This can not be simpler. We
+just need to base64 decode the file.
+
+```bash
+base64 -d data.txt
+```
+
+This gives the password right away.
+
+## Level 11 --> level 12
+
+Let's login to level 11. The instruction says that the password for the next level is stored in the file data.txt, where all lowercase 
+(a-z) and uppercase (A-Z) letters have been rotated by 13 positions. This is a classic case of [Caeser cipher](https://en.wikipedia.org/wiki/Caesar_cipher) 
+(Cryptography 101) with the shift value already given (13).
+
+We will again use python to read and decode this file. Let's write a quick function to decipher and use it.
+
+```python
+def decodeCaeser(ciphertext, shift=13):
+  plaintext = ''
+
+  A = ord('A')
+  a = ord('a')'
+
+  charToTuple = lambda ch: (ord(ch)-A, A) if ch.isupper() else (ord(ch)-a, a)
+  tupleToChar = lambda t: chr(t[0] + t[1])
+
+  for ch in ciphertext:
+    if not ch.isalpha():
+      plaintext = plaintext + ch
+      continue
+
+    num, base = charToTuple(ch)
+    rotated = ((num + shift + 26) % 26, base)
+    plaintext = plaintext + tupleToChar(rotated)
+
+  return plaintext
+
+print(decode(open('data.txt', 'r').read()))
+```
+
+## Wrapping up for today
+
+Well, we solved 11 levels in one sitting. These were quite basic. I will stop for today here. In the next session (i.e. the next part
+of this series of blogposts) we will go through the subsequent levels. Today's wargaming session shows that we can use simple commands
+and beginner level knowledge of linux and python to solve these levels.
+
+
+
+
